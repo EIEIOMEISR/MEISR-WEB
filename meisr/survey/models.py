@@ -25,7 +25,7 @@ class Question(models.Model):
         return str(self.id) + ' ' + str(self.question_text)
 
 class Child(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     age = models.IntegerField(default=0)
 
     def __str__(self):
@@ -38,8 +38,8 @@ class Answer(models.Model):
         (3, 'Often/Beyond This'),
     )
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    user = models.ForeignKey(Child, on_delete=models.CASCADE)
     rating = models.IntegerField(default=1, choices=CHOICES)
     
     class Meta:

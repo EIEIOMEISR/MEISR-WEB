@@ -10,5 +10,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Answer
-		fields = ('id', 'question', 'user', 'rating')
-		read_only_fields = ['question', 'user']
+		fields = ('id', 'user', 'question', 'rating')
+		read_only_fields = ['user']
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
