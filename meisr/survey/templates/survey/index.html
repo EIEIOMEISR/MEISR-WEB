@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% for question in question_list %}
+    	
+        {{question.get_section_display}}: {{ question.question_text }}<br>
+
+    {% endfor %}
+
+{% endblock %}
