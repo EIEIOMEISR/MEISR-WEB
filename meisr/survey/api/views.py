@@ -43,3 +43,6 @@ class AnswerUpdate(MultipleFieldLookupMixin, generics.RetrieveUpdateAPIView):
 	lookup_fields = ('user', 'question')
 	queryset = Answer.objects.all()
 	serializer_class = AnswerSerializer
+
+	def get_queryset(self):
+		return Answer.objects.filter(user=self.request.user)
