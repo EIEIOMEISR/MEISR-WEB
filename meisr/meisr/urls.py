@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^survey/', include('survey.urls'), name='survey'),
+    url(r'^', include('survey.urls'), name='survey'),
     url(r'^api/', include('survey.api.urls'), name='api-survey'),
     url(r'^admin/', admin.site.urls),
 ]
