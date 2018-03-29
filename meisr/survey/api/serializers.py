@@ -5,7 +5,7 @@ from survey.models import Answer
 class QuestionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Question
-		fields = ('id','question_text', 'starting_age', 'section')
+		fields = ('id','question_text', 'starting_age', 'section', 'func', 'dev', 'out')
 
 class AnswerSerializer(serializers.ModelSerializer):
 	class Meta:

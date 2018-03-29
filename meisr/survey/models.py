@@ -51,7 +51,7 @@ class FunctionalDomain(models.Model):
             ('I', 'I = independence'),
             ('S', 'S = social relationships'),
         )
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question,related_name='func', on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=CHOICES)
 
 class DevelopmentalDomain(models.Model):
@@ -62,7 +62,7 @@ class DevelopmentalDomain(models.Model):
             ('M', 'M = motor'),
             ('S', 'S = social'),
         )
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question,related_name='dev', on_delete=models.CASCADE)
     choice = models.CharField(max_length=2, choices=CHOICES)
 
 class Outcome(models.Model):
@@ -71,7 +71,7 @@ class Outcome(models.Model):
             ('K', 'K = acquiring and using knowledge and skills'),
             ('A', 'A = taking action to meet needs'),
         )
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='out', on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=CHOICES)
 
 class Score(models.Model):
