@@ -105,3 +105,7 @@ ENV/
 
 #Database
 *.sqlite3
+
+#MEISR
+.DS_Store
+meisr/meisr/setttings.py
