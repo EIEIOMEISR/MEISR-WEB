@@ -73,3 +73,11 @@ class Outcome(models.Model):
         )
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=CHOICES)
+
+class Score(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    raw = models.DecimalField(max_digits=4, decimal_places=2)
+    dev = models.DecimalField(max_digits=4, decimal_places=2)
+    func = models.DecimalField(max_digits=4, decimal_places=2)
+    out = models.DecimalField(max_digits=4, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
