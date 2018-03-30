@@ -108,4 +108,4 @@ ENV/
 
 #MEISR
 .DS_Store
-meisr/meisr/setttings.py
+meisr/meisr/settings.py
