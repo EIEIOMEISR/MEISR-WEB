@@ -1,8 +1,9 @@
-from django.conf.urls import url
-from .views import QuestionList, AnswerUpdate, AnswerList
+from django.conf.urls import url, include
+from .views import QuestionList, AnswerList, AnswerDetail, ScoreList
 
 urlpatterns = [
 	url(r'^questions/', QuestionList.as_view(), name='question-list'),
+	url(r'^answers/(?P<question>\d+)/', AnswerDetail.as_view(), name='answer-detail'),
 	url(r'^answers/', AnswerList.as_view(), name='answer-list'),
-	url(r'^u/(?P<user>\d)/q/(?P<question>\d)/', AnswerUpdate.as_view(), name='answer-update'),
+	url(r'^scores/', ScoreList.as_view(), name='score-list'),
 ]

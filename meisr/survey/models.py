@@ -54,6 +54,9 @@ class FunctionalDomain(models.Model):
     question = models.ForeignKey(Question,related_name='func', on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=CHOICES)
 
+    class Meta:
+        unique_together = (("question", "choice"),)
+
 class DevelopmentalDomain(models.Model):
     CHOICES = (
             ('A', 'A = adaptive'),
@@ -65,6 +68,9 @@ class DevelopmentalDomain(models.Model):
     question = models.ForeignKey(Question,related_name='dev', on_delete=models.CASCADE)
     choice = models.CharField(max_length=2, choices=CHOICES)
 
+    class Meta:
+        unique_together = (("question", "choice"),)
+
 class Outcome(models.Model):
     CHOICES = (
             ('S', 'S = positive social relations'),
@@ -73,6 +79,9 @@ class Outcome(models.Model):
         )
     question = models.ForeignKey(Question, related_name='out', on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=CHOICES)
+
+    class Meta:
+        unique_together = (("question", "choice"),)
 
 class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
