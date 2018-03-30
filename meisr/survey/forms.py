@@ -11,8 +11,9 @@ class SurveyForm(forms.Form):
 		questions = kwargs.pop('questions')
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
-		result = requests.post('http://127.0.0.1:8000/rest-auth/login/', data={'username':'bds','password':'one12345'})
-		result = requests.get('http://127.0.0.1:8000/api/answers/', headers={'Authorization': 'JWT '+result.json()['token']})
+		headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0' }
+		result = requests.post('http://http://skim99.pythonanywhere.com/rest-auth/login/', data={'username':'bds','password':'one12345'}, headers=headers)
+		result = requests.get('http://http://skim99.pythonanywhere.com/api/answers/', headers={'Authorization': 'JWT '+result.json()['token']})
 		answers = {}
 		for x in result.json():
 			answers[x['question']] = x['rating']
