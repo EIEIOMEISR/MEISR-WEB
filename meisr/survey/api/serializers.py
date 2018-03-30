@@ -10,6 +10,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Question
 		fields = ('id','question_text', 'starting_age', 'section', 'func', 'dev', 'out')
+	
 	def get_section(self, obj):
 		return obj.get_section_display()
 	def get_func(self, obj):
@@ -19,7 +20,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 	def get_out(self, obj):
 		return(Outcome.objects.filter(question=obj.id).values_list('choice', flat=True))
 
-
 class AnswerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Answer
@@ -27,3 +27,5 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
+
+	#TODO: add validation
