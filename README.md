@@ -13,4 +13,4 @@ Backend for MEISR App
 5. api endpoints:
   * /api/questions
   * /api/answers
-  * /api/u/<id>/q/<qid>
+  * /api/update
