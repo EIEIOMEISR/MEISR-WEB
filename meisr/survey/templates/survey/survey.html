@@ -1,15 +1,7 @@
-{% extends "base.html" %}
-{% block content %}
-
-    <div class="survey">
-        <form enctype="multipart/*" action="/" method="post">
-
-        {% for question in questions %}
-            <p>{{ question.question_text }}</p><ul>{{ question.form.as_ul }}</ul>
-        {% endfor %}
-
-    <div><input type="submit" value="submit" /></div>
-</form>
+<div class="survey">
+	<form method="POST" action=".">
+		{% csrf_token %}
+		{{ form }}
+		<input type=submit>
+	</form>
 </div>
-
-{% endblock %}

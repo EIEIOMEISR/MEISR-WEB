@@ -1,53 +1,30 @@
-from django.views import generic
-from django.shortcuts import render, render_to_response
-from django.http import HttpResponseRedirect
-from django.views.generic.base import TemplateView
+import requests
 
-from .forms import NameForm, SurveyForm, AnswerForm
+from django.shortcuts import redirect, render_to_response, render
 
-from .models import Question
+from django.views.decorators.csrf import csrf_exempt
 
+from .forms import SurveyForm
 
-class IndexView(generic.ListView):
-    template_name = 'survey/index.html'
+def survey(request):
+    result = requests.get('http://127.0.0.1:8000/api/questions/')
+    questions = [(x['id'], x['question_text']) for x in result.json()]
 
-    def get_queryset(self):
-        return Question.objects.order_by('section')
+    result = requests.post('http://127.0.0.1:8000/rest-auth/login/', data={'username':'bds','password':'one12345'})
+    result = requests.get('http://127.0.0.1:8000/api/answers/', headers={'Authorization': 'JWT '+result.json()['token']})
+    answers = {}
+    for x in result.json():
+        answers[x['question']] = x['rating']
 
-def get_name(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = NameForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+    form = SurveyForm(request.POST or None, questions=questions)
+    if form.is_valid():
+        for (question, answer) in form.answers():
+            if question in answers:
+                if answer != answers[question]:
+                    print('UPDATING answer to question {}'.format(question))
+            else:
+                print('ADDING answer to question {}'.format(question))
+            pass
+        pass
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = NameForm()
-
-    return render(request, 'survey/name.html', {'form': form})
-
-class SurveyView(TemplateView):
-	template_name = 'survey/name.html'
-
-	def get(self, request):
-		form = SurveyForm()
-		return render(request, self.template_name, {'form': form})
-
-def index(request):
-	questions = Question.objects.all()
-	if request.method == 'POST':
-		print(request.POST)
-		for q in questions:
-			try:
-				data ={ u'%s-answer'%q.id: request.POST[u'%s-answer'%q.id]}
-			except:
-				data = { u'%s-answer'%q.id: None}
-	else:
-		pass
-	return render_to_response('survey/survey.html', {'questions': questions,})
+    return render(request, "survey/survey.html", {'form': form})
