@@ -4,18 +4,19 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     CHOICES = (
         (1, 'Waking Up'),
-        (2, 'Meals'),
-        (3, 'Dressing'),
-        (4, 'Toileting/Diaper Change'),
-        (5, 'Outings (except grocery shopping'),
+        (2, 'Meal Times'),
+        (3, 'Getting Dressed'),
+        (4, 'Toileting/Diaper'),
+        (5, 'Outings (Going Out'),
         (6, 'Play Time With Others'),
-        (7, 'Play Time Alone'),
-        (8, 'Nap'),
-        (9, 'Bath'),
-        (10, 'Hanging Out/Books/TV'),
+        (7, 'Play Time by Him or Herself'),
+        (8, 'Nap Time'),
+        (9, 'Bath Time'),
+        (10, 'Hanging Out Time (including TV & Books'),
         (11, 'Grocery Shopping'),
-        (12, 'Outdoors'),
+        (12, 'Outside Time'),
         (13, 'Bedtime'),
+        (14, 'Transition Time')
     )
     question_text = models.CharField(max_length=200)
     starting_age = models.IntegerField(default=0)

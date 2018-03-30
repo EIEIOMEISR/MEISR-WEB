@@ -8,6 +8,7 @@ from .serializers import *
 class QuestionList(generics.ListAPIView):
 	queryset = Question.objects.all()
 	serializer_class = QuestionSerializer
+	authentication_classes = ()
 
 class AnswerList(generics.ListCreateAPIView):
 	serializer_class = AnswerSerializer
