@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Question(models.Model):
+    question_text = models.CharField(max_length=200, unique=True)
+    starting_age = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.id) + ': ' + str(self.question_text)
+
+class Routine(models.Model):
     CHOICES = (
         (1, 'Waking Up'),
         (2, 'Meal Times'),
@@ -18,12 +25,11 @@ class Question(models.Model):
         (13, 'Bedtime'),
         (14, 'Transition Time')
     )
-    question_text = models.CharField(max_length=200)
-    starting_age = models.IntegerField(default=0)
-    section = models.IntegerField(choices=CHOICES)
+    question = models.ForeignKey(Question,related_name='routine', on_delete=models.CASCADE)
+    choice = models.IntegerField(choices=CHOICES)
 
-    def __str__(self):
-        return str(self.id) + ' ' + str(self.question_text)
+    class Meta:
+        unique_together = (("question", "choice"),)
 
 class Child(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -36,7 +42,8 @@ class Answer(models.Model):
     CHOICES = (
         (1, 'Not yet'),
         (2, 'Sometimes'),
-        (3, 'Often/Beyond This'),
+        (3, 'Often'),
+        (4, 'Beyond This')
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
