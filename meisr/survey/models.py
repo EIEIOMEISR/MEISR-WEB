@@ -8,18 +8,22 @@ class Question(models.Model):
     def __str__(self):
         return str(self.id) + ': ' + str(self.question_text)
 
+    class Meta:
+        ordering = ['starting_age', 'question_text']
+
+
 class Routine(models.Model):
     CHOICES = (
         (1, 'Waking Up'),
         (2, 'Meal Times'),
         (3, 'Getting Dressed'),
         (4, 'Toileting/Diaper'),
-        (5, 'Outings (Going Out'),
+        (5, 'Outings (Going Out)'),
         (6, 'Play Time With Others'),
         (7, 'Play Time by Him or Herself'),
         (8, 'Nap Time'),
         (9, 'Bath Time'),
-        (10, 'Hanging Out Time (including TV & Books'),
+        (10, 'Hanging Out Time (including TV & Books)'),
         (11, 'Grocery Shopping'),
         (12, 'Outside Time'),
         (13, 'Bedtime'),
@@ -48,10 +52,11 @@ class Answer(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    routine = models.ForeignKey(Routine, on_delete=models.CASCADE)
     rating = models.IntegerField(default=1, choices=CHOICES)
     
     class Meta:
-        unique_together = (("question", "user"),)
+        unique_together = (("question", "routine", "user"),)
 
 class FunctionalDomain(models.Model):
     CHOICES = (

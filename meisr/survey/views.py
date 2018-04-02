@@ -1,24 +1,16 @@
-import requests
-
 from django.shortcuts import redirect, render_to_response, render
 
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import SurveyForm
 
+from .models import Answer
+
 def survey(request):
-    headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0' }
+    answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
 
-    result = requests.get('http://skim99.pythonanywhere.com/api/questions/', headers=headers)
-    questions = [(x['id'], x['question_text']) for x in result.json()]
-
-    result = requests.post('http://skim99.pythonanywhere.com/rest-auth/login/', data={'username':'bds','password':'one12345'}, headers=headers)
-    result = requests.get('http://skim99.pythonanywhere.com/api/answers/', headers={'Authorization': 'JWT '+result.json()['token']})
-    answers = {}
-    for x in result.json():
-        answers[x['question']] = x['rating']
-
-    form = SurveyForm(request.POST or None, questions=questions)
+    form = SurveyForm(request.POST or None, answers=answers)
+    
     if form.is_valid():
         for (question, answer) in form.answers():
             if question in answers:
@@ -26,6 +18,7 @@ def survey(request):
                     print('UPDATING answer to question {}'.format(question))
             else:
                 print('ADDING answer to question {}'.format(question))
+                Answer(user=request.user, question=question)
             pass
         pass
 

@@ -1,7 +1,13 @@
 <div class="survey">
 	<form method="POST" action=".">
 		{% csrf_token %}
-		{{ form }}
+
+		{% for field in form %}
+
+			<h1>{{ field.field.widget.attrs.header }}</h1>
+
+			<p> {{ field.label_tag }} {{ field }}</p>
+		{% endfor %}
 		<input type=submit>
 	</form>
 </div>
