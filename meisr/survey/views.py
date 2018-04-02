@@ -12,13 +12,17 @@ def survey(request):
     form = SurveyForm(request.POST or None, answers=answers)
     
     if form.is_valid():
-        for (question, answer) in form.answers():
-            if question in answers:
-                if answer != answers[question]:
-                    print('UPDATING answer to question {}'.format(question))
+        for (question, rating) in form.answers():
+            if question.id in answers:
+                if rating != answers[question.id]:
+                    print('UPDATING answer to question {}'.format(question.id))
+                    a = Answer.objects.get(user=request.user, question=question)
+                    a.rating = rating
+                    a.save()
             else:
-                print('ADDING answer to question {}'.format(question))
-                Answer(user=request.user, question=question)
+                print('ADDING answer to question {}'.format(question.id))
+                a = Answer(user=request.user, question=question, rating=rating)
+                a.save()
             pass
         pass
 

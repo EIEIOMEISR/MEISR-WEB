@@ -2,9 +2,6 @@ from django.contrib import admin
 
 from .models import *
 
-class RoutineInline(admin.TabularInline):
-	model = Routine
-
 class FunctionalDomainInline(admin.TabularInline):
 	model = FunctionalDomain
 
@@ -14,8 +11,13 @@ class DevelopmentalDomainInline(admin.TabularInline):
 class OutcomeInline(admin.TabularInline):
 	model = Outcome
 
+class RoutineAdmin(admin.ModelAdmin):
+	list_display = [field.name for field in Routine._meta.fields]
+
+admin.site.register(Routine, RoutineAdmin)
+
 class QuestionAdmin(admin.ModelAdmin):
-	inlines = [RoutineInline, FunctionalDomainInline, DevelopmentalDomainInline, OutcomeInline,]
+	inlines = [FunctionalDomainInline, DevelopmentalDomainInline, OutcomeInline,]
 	list_display = [field.name for field in Question._meta.fields]
 
 admin.site.register(Question, QuestionAdmin)
@@ -49,8 +51,3 @@ class ScoreAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Score._meta.fields]
 
 admin.site.register(Score, ScoreAdmin)
-
-class RoutineAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in Routine._meta.fields]
-
-admin.site.register(Routine, RoutineAdmin)
