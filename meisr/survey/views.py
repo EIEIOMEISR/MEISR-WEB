@@ -27,3 +27,12 @@ def survey(request):
         pass
 
     return render(request, "survey/survey.html", {'form': form})
+
+def scores(request):
+    return
+
+def login(request):
+    return
+
+def analysis(request):
+    return render(request, "survey/analysis.html")
