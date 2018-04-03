@@ -2,6 +2,7 @@ from rest_framework import serializers
 from survey.models import *
 
 class QuestionSerializer(serializers.ModelSerializer):
+	routine = serializers.SerializerMethodField()
 	func = serializers.SerializerMethodField()
 	dev = serializers.SerializerMethodField()
 	out = serializers.SerializerMethodField()
@@ -9,6 +10,9 @@ class QuestionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Question
 		fields = ('id','question_text', 'starting_age', 'routine', 'func', 'dev', 'out',)
+
+	def get_routine(self, obj):
+		return obj.routine.description
 
 	def get_func(self, obj):
 		return(FunctionalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
