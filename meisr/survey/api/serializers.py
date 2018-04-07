@@ -36,3 +36,4 @@ class ScoreSerializer(serializers.ModelSerializer):
 		model = Score
 		fields = ('id', 'user', 'raw', 'dev', 'func', 'out', 'timestamp',)
 		read_only_fields = ['user']
+
