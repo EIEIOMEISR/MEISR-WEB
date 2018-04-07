@@ -1,5 +1,6 @@
 from django import forms
 
+
 from .models import Question, Answer, Routine
 
 class SurveyForm(forms.Form):
@@ -16,13 +17,15 @@ class SurveyForm(forms.Form):
 			self.fields['custom_%s' % i] = forms.ChoiceField(
 				required=False,
 				label=q.question_text,
-				widget=forms.RadioSelect(attrs={'question':q, 'header':header}),
+				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline'}),
 				choices=Answer.CHOICES
 				)
 			if q.id in answers:
 				self.initial['custom_%s' % i] = answers[q.id]
 			else:
-				self.initial['custom_%s' % i] = 1
+				pass
+				#not defaulting to 1 anymore should be NULL
+				#self.initial['custom_%s' % i] = 1
 			prev = q
 
 	def answers(self):

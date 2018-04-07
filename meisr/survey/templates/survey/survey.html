@@ -1,13 +1,57 @@
-<div class="survey">
+{% extends "survey/base.html" %}
+
+{% block content %}
+
 	<form method="POST" action=".">
 		{% csrf_token %}
 
 		{% for field in form %}
 
-			<h1>{{ field.field.widget.attrs.header }}</h1>
+				
 
-			<p> {{ field.label_tag }} {{ field }}</p>
+
+			{% if field.field.widget.attrs.header %}
+				<div class="row pb-2">
+					<div class="col">
+					<h2>{{ field.field.widget.attrs.header }}</h2>
+						
+					</div>
+				</div>
+			{% endif %}
+
+
+
+
+			<div class="row">
+				<div class="col">
+						{{ field.label_tag }}
+				</div>
+
+				<div class="col btn-group btn-group-toggle align-self-start" data-toggle="buttons">
+					
+					{% for radio in field %}
+						<label style="height:37px;" class="btn btn-secondary">
+						{{radio}}
+						</label>
+					{% endfor %}
+					
+				</div>
+			</div>
+
+
+		<hr>
+
 		{% endfor %}
-		<input type=submit>
+
+
+	<div class="row">
+		<div class="text-center fixed-bottom bg-dark p-1">
+			<input class="btn btn-secondary" type=submit name="save" value="Save"\>
+			<input class="btn btn-primary" type=submit name="submit" value="Submit"\>
+		</div>
+	</div>
+
+		
 	</form>
-</div>
+
+{% endblock %}

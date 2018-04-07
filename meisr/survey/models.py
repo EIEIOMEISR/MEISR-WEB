@@ -30,8 +30,7 @@ class Answer(models.Model):
     CHOICES = (
         (1, 'Not yet'),
         (2, 'Sometimes'),
-        (3, 'Often'),
-        (4, 'Beyond This')
+        (3, 'Often/Beyond'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
