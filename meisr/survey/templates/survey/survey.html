@@ -11,9 +11,9 @@
 
 
 			{% if field.field.widget.attrs.header %}
-				<div class="row pb-2">
+				<div class="row py-4 text-center">
 					<div class="col">
-					<h2>{{ field.field.widget.attrs.header }}</h2>
+					<h1>{{ field.field.widget.attrs.header }}</h1>
 						
 					</div>
 				</div>
@@ -27,6 +27,9 @@
 						{{ field.label_tag }}
 				</div>
 
+				<div class="text-center">
+					
+
 				<div class="col btn-group btn-group-toggle align-self-start" data-toggle="buttons">
 					
 					{% for radio in field %}
@@ -36,6 +39,9 @@
 					{% endfor %}
 					
 				</div>
+
+				</div>
+
 			</div>
 
 

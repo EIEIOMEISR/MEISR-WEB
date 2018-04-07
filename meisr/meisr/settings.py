@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -149,5 +148,3 @@ SITE_ID = 1
 
 # For registration
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
