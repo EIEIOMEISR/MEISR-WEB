@@ -26,7 +26,7 @@ SECRET_KEY = 'z6eagruqw@z9+4#2*k%32byh_f^95jxwj89q7nbt1f9p*95k_n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['skim99.pythonanywhere.com']
 
 
 # Application definition
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-    'bootstrap_datepicker',
 ]
 
 MIDDLEWARE = [

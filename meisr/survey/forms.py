@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from bootstrap_datepicker.widgets import DatePicker
 from .models import *
 
 class SurveyForm(forms.Form):
@@ -38,7 +37,7 @@ class SurveyForm(forms.Form):
 
 class SignUpForm(UserCreationForm):
     email = email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
-    birth_date = forms.DateField(label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MMDDYYYY'}))
+    birth_date = forms.DateField(label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MM/DD/YYYY'}))
 
     class Meta:
         model = User
