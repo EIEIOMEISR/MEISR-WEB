@@ -1,7 +1,8 @@
 from django import forms
-
-
-from .models import Question, Answer, Routine
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from bootstrap_datepicker.widgets import DatePicker
+from .models import *
 
 class SurveyForm(forms.Form):
 	def __init__(self, *args, **kwargs):
@@ -34,3 +35,18 @@ class SurveyForm(forms.Form):
 		for name, value in self.cleaned_data.items():
 			if name.startswith('custom_'):
 				yield (self.fields[name].widget.attrs['question'], int(value))
+
+class SignUpForm(UserCreationForm):
+    email = email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
+    birth_date = forms.DateField(label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MMDDYYYY'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'birth_date', 'password1', 'password2', )
+
+    def __init__(self, *args, **kwargs):
+	    super(SignUpForm, self).__init__(*args, **kwargs)
+
+	    self.fields['username'].widget.attrs['class'] = 'form-control'
+	    self.fields['password1'].widget.attrs['class'] = 'form-control'
+	    self.fields['password2'].widget.attrs['class'] = 'form-control'

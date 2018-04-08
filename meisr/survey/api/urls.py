@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from .views import QuestionList, AnswerList, AnswerDetail, ScoreList
+from .views import *
 
 urlpatterns = [
 	url(r'^questions/', QuestionList.as_view(), name='question-list'),

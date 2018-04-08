@@ -1,0 +1,11 @@
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 15px 60px;
+}
+
+code {
+  font-size: 80%;
+}

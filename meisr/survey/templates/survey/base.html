@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{% static 'css/survey.css' %}">
+    <link href="{% static 'css/login.css' %}" rel="stylesheet">
 
-    <title>title</title>
+    <title>MEISR</title>
   </head>
 
 
@@ -49,14 +50,17 @@
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             <li>
-              <a class="nav-link" href="#">Logout</a>
+              <a class="nav-link" href="/profile/">{{request.user}}</a>
+            </li>
+            <li>
+              <a class="nav-link" href="/logout/">Sign out</a>
             </li>
             {% else %}
             <li>
-              <a class="nav-link" href="#">Login</a>
+              <a class="nav-link" href="/login/">Sign in</a>
             </li>
             <li>
-              <a class="nav-link" href="#">Register</a>
+              <a class="nav-link" href="/signup/">Create account</a>
             </li>
             {% endif %}
 

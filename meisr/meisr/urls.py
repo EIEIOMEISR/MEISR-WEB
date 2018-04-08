@@ -16,13 +16,17 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework_jwt.views import refresh_jwt_token, obtain_jwt_token
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^', include('survey.urls'), name='survey'),
     url(r'^api/', include('survey.api.urls'), name='api-survey'),
-    url(r'^admin/', admin.site.urls),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^refresh-token/', refresh_jwt_token),
     url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^admin/', admin.site.urls),
 ]

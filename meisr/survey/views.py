@@ -1,10 +1,9 @@
 from django.shortcuts import redirect, render_to_response, render
-
 from django.views.decorators.csrf import csrf_exempt
-
-from .forms import SurveyForm
-
-from .models import Answer
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from .forms import *
+from .models import *
 
 def survey(request):
     answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
@@ -28,11 +27,18 @@ def survey(request):
 
     return render(request, "survey/survey.html", {'form': form})
 
-def scores(request):
-    return
-
-def login(request):
-    return
-
-def analysis(request):
-    return render(request, "survey/analysis.html")
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.birth_date = form.cleaned_data.get('birth_date')
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})

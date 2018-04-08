@@ -27,10 +27,10 @@ class AnswerAdmin(admin.ModelAdmin):
 
 admin.site.register(Answer, AnswerAdmin)
 
-class ChildAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in Child._meta.fields]
+class ProfileAdmin(admin.ModelAdmin):
+	list_display = [field.name for field in Profile._meta.fields]
 
-admin.site.register(Child, ChildAdmin)
+admin.site.register(Profile, ProfileAdmin)
 
 class FunctionalDomainAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in FunctionalDomain._meta.fields]

@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Routine(models.Model):
     description = models.CharField(max_length=200, unique=True)
-    number = models.PositiveIntegerField(unique=True)
+    number = models.PositiveSmallIntegerField(unique=True)
 
     def __str__(self):
         return self.description
@@ -11,7 +13,7 @@ class Routine(models.Model):
 class Question(models.Model):
     routine = models.ForeignKey(Routine, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200, unique=True)
-    starting_age = models.PositiveIntegerField(default=0)
+    starting_age = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.question_text
@@ -19,12 +21,18 @@ class Question(models.Model):
     class Meta:
         ordering = ['routine', 'starting_age', 'question_text']
 
-class Child(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    age = models.PositiveIntegerField(default=0)
+    birth_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user)
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 class Answer(models.Model):
     CHOICES = (
@@ -35,7 +43,7 @@ class Answer(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=1, choices=CHOICES)
+    rating = models.IntegerField(null=True, choices=CHOICES)
     
     class Meta:
         unique_together = (("question", "user"),)
