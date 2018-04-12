@@ -1,52 +1,45 @@
 {% extends "survey/base.html" %}
 
 {% block content %}
-	<form method="POST" action=".">
-		{% csrf_token %}
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
 
-		{% for field in form %}
+<script type="text/javascript">
+	$(window).load(function () {
+		console.log('loaded')
+		$(':input:checked').closest('.btn').addClass('active');
+	});
+</script>
 
-				
+<form method="POST" action=".">
+	{% csrf_token %}
 
+	{% for field in form %}
 
-			{% if field.field.widget.attrs.header %}
-				<div class="row py-4 text-center">
-					<div class="col">
-					<h1>{{ field.field.widget.attrs.header }}</h1>
-						
-					</div>
-				</div>
-			{% endif %}
+		{% if field.field.widget.attrs.header %}
+		<div class="row py-4 text-center">
+			<div class="col">
+				<h1>{{ field.field.widget.attrs.header }}</h1>
+			</div>
+		</div>
+		{% endif %}
 
-
-
-
-			<div class="row">
-				<div class="col">
-						{{ field.label_tag }}
-				</div>
-
-				<div class="text-center">
-					
-
-				<div class="col btn-group btn-group-toggle align-self-start" data-toggle="buttons">
-					
-					{% for radio in field %}
-						<label style="height:37px;" class="btn btn-secondary">
-						{{radio}}
-						</label>
-					{% endfor %}
-					
-				</div>
-
-				</div>
-
+		<div class="row">
+			<div class="col">
+				{{ field.label_tag }}
 			</div>
 
-
+			<div class="text-center">
+				<div class="col btn-group btn-group-toggle align-self-start" data-toggle="buttons">
+					{% for radio in field %}
+					<label style="height:37px;" class="btn btn-secondary">
+						{{radio}}
+					</label>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 		<hr>
-
-		{% endfor %}
+	{% endfor %}
 
 
 	<div class="row">
@@ -56,7 +49,6 @@
 		</div>
 	</div>
 
-		
-	</form>
+</form>
 
 {% endblock %}

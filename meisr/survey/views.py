@@ -15,20 +15,21 @@ def survey(request):
     form = SurveyForm(request.POST or None, answers=answers)
     
     if form.is_valid():
+        print('start saving')
         for (question, rating) in form.answers():
-            if question.id in answers:
-                if rating != answers[question.id]:
-                    print('UPDATING answer to question {}'.format(question.id))
-                    a = Answer.objects.get(user=request.user, question=question)
-                    a.rating = rating
-                    a.save()
-            else:
-                print('ADDING answer to question {}'.format(question.id))
+            # update an answer
+            if question.id in answers and rating != answers[question.id]:
+                a = Answer.objects.get(user=request.user, question=question)
+                a.rating = rating
+                a.save()
+                print(question.id,'changed to',rating)
+            # add a new answer
+            elif question.id not in answers:
                 a = Answer(user=request.user, question=question, rating=rating)
                 a.save()
-            pass
-        pass
+        print('done saving')
 
+    print('rendering')
     return render(request, "survey/survey.html", {'form': form})
 
 def signup(request):

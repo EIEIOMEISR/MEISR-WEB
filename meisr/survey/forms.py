@@ -11,6 +11,7 @@ class SurveyForm(forms.Form):
 
 		prev = None
 		for i,q in enumerate(Question.objects.all()):
+			# add a header before question if new routine
 			header = ''
 			if not prev or q.routine != prev.routine:
 				header = q.routine
@@ -22,15 +23,11 @@ class SurveyForm(forms.Form):
 				)
 			if q.id in answers:
 				self.initial['custom_%s' % i] = answers[q.id]
-			else:
-				pass
-				#not defaulting to 1 anymore should be NULL
-				#self.initial['custom_%s' % i] = 1
 			prev = q
 
 	def answers(self):
 		for name, value in self.cleaned_data.items():
-			if name.startswith('custom_'):
+			if name.startswith('custom_') and value:
 				yield (self.fields[name].widget.attrs['question'], int(value))
 
 class SignUpForm(UserCreationForm):

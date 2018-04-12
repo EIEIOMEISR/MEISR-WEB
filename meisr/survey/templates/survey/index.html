@@ -3,47 +3,34 @@
 {% block content %}
 
 <div class="row">
-        <div class="col-lg-12">
-        	<div class="text-center">
-          <h1 class="display-4 mt-3">Online MEISR Tool</h1>
-        		
-        	</div>
-          <p class="lead">The MEISR has been designed to develop a profile of functional behaviors of a child from birth to 3 years of age, in home/community routines. It is to be completed by a caregiver who has observed the child often in the home, such as a parent and/or by a parent with a professional.</p>
-<hr>
-			
-			<div class="text-center">
-          <h1 class="h3">The Purpose</h1>
-        		
-        	</div>
-          <ul class="lead">
-            <li>to help families, as members of intervention teams, assess the child’s competence in everyday situations, which might help them decide on intervention priorities</li>
-            <li>to help professionals ask families relevant questions about child functioning in home routines, such as when conducting a routines-based interview</li>
-            <li>to monitor a child’s progress</li>
-          </ul>
-<hr>
-              <div class="text-center">
-          <h1 class="h3">Instructions</h1>
-        		
-        	</div>
+	<div class="col-lg-12">
+		<div class="text-center"><h1 class="display-4 mt-3">Online MEISR Tool</h1></div>
+		<p class="lead">The MEISR has been designed to develop a profile of functional behaviors of a child from birth to 3 years of age, in home/community routines. It is to be completed by a caregiver who has observed the child often in the home, such as a parent and/or by a parent with a professional.</p>
+		
+		<hr>
 
-          <p class="lead">To complete the MEISR, read each statement in each of the routines and click on one of the following: 1 = not yet, if the child does not perform the behavior described by the item, 2 = sometimes, if the child performs the behavior sometimes, and 3 = often/beyond this, if the child performs the behavior often or beyond often.</p>
+		<div class="text-center"><h1 class="h3">The Purpose</h1></div>
+		<ul class="lead">
+			<li>to help families, as members of intervention teams, assess the child’s competence in everyday situations, which might help them decide on intervention priorities</li>
+			<li>to help professionals ask families relevant questions about child functioning in home routines, such as when conducting a routines-based interview</li>
+			<li>to monitor a child’s progress</li>
+		</ul>
 
+		<hr>
 
-         
-        </div>
-
+		<div class="text-center"><h1 class="h3">Instructions</h1></div>
+		<p class="lead">To complete the MEISR, read each statement in each of the routines and click on one of the following: 1 = not yet, if the child does not perform the behavior described by the item, 2 = sometimes, if the child performs the behavior sometimes, and 3 = often/beyond this, if the child performs the behavior often or beyond often.</p>
+	</div>
 </div>
-        <div class="row text-center pt-3">
-        	<div class="col">
-    		{% if request.user.is_authenticated and not is_new_user %}
-    		<a class="btn btn-primary" href="/survey/" role="button">Continue MEISR</a>
-            {% else %}
-            <a class="btn btn-primary" href="/survey/" role="button">Begin MEISR</a>
-            {% endif %}
 
-        
-        		
-        	</div>
-        </div>
+<div class="row text-center pt-3">
+	<div class="col">
+		{% if request.user.is_authenticated and not is_new_user %}
+		<a class="btn btn-primary" href="/survey/" role="button">Continue MEISR</a>
+		{% else %}
+		<a class="btn btn-primary" href="/survey/" role="button">Begin MEISR</a>
+		{% endif %}
+	</div>
+</div>
 
 {% endblock %}
