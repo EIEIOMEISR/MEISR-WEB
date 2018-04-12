@@ -6,7 +6,6 @@ from .models import *
 class SurveyForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		answers = kwargs.pop('answers')
-		
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
 		prev = None
@@ -16,7 +15,7 @@ class SurveyForm(forms.Form):
 			if not prev or q.routine != prev.routine:
 				header = q.routine
 			self.fields['custom_%s' % i] = forms.ChoiceField(
-				required=False,
+				required=True,
 				label=q.question_text,
 				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline'}),
 				choices=Answer.CHOICES

@@ -11,25 +11,22 @@ def index(request):
 
 def survey(request):
     answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
-
     form = SurveyForm(request.POST or None, answers=answers)
     
     if form.is_valid():
-        print('start saving')
+        #'submit' in request.POST)
+        #Profile.objects.filter(user=request.user.id)[0].birth_date
         for (question, rating) in form.answers():
             # update an answer
             if question.id in answers and rating != answers[question.id]:
                 a = Answer.objects.get(user=request.user, question=question)
                 a.rating = rating
                 a.save()
-                print(question.id,'changed to',rating)
             # add a new answer
             elif question.id not in answers:
                 a = Answer(user=request.user, question=question, rating=rating)
                 a.save()
-        print('done saving')
 
-    print('rendering')
     return render(request, "survey/survey.html", {'form': form})
 
 def signup(request):
@@ -47,3 +44,9 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+'''
+@staff_member_required
+def raw_data(request):
+    pass
+'''
