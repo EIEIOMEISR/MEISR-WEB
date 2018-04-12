@@ -2,8 +2,18 @@ from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
 from survey.models import *
 
+from allauth.account import app_settings as allauth_settings
+from allauth.utils import email_address_exists
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
+
+class RoutineSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Routine
+		fields = ('id', 'description', 'number')
+
 class QuestionSerializer(serializers.ModelSerializer):
-	routine = serializers.SerializerMethodField()
+	routine = RoutineSerializer(read_only=True)
 	func = serializers.SerializerMethodField()
 	dev = serializers.SerializerMethodField()
 	out = serializers.SerializerMethodField()
@@ -11,9 +21,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Question
 		fields = ('id','question_text', 'starting_age', 'routine', 'func', 'dev', 'out',)
-
-	def get_routine(self, obj):
-		return obj.routine.description
 
 	def get_func(self, obj):
 		return(FunctionalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
@@ -56,3 +63,44 @@ class UserSerializer(UserDetailsSerializer):
             profile.birth_date = birth_date
             profile.save()
         return instance
+
+class RegisterSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=allauth_settings.EMAIL_REQUIRED)
+    username = serializers.CharField(required=True)
+    password1 = serializers.CharField(required=True, write_only=True)
+    password2 = serializers.CharField(required=True, write_only=True)
+    birth_date = serializers.DateField(required=True)
+
+    def validate_email(self, email):
+        email = get_adapter().clean_email(email)
+        if allauth_settings.UNIQUE_EMAIL:
+            if email and email_address_exists(email):
+                raise serializers.ValidationError(
+                    _("A user is already registered with this e-mail address."))
+        return email
+
+    def validate_password1(self, password):
+        return get_adapter().clean_password(password)
+
+    def validate(self, data):
+        if data['password1'] != data['password2']:
+            raise serializers.ValidationError(
+                _("The two password fields didn't match."))
+        return data
+
+    def get_cleaned_data(self):
+        return {
+            'birth_date': self.validated_data.get('birth_date', ''),
+            'username': self.validated_data.get('username', ''),
+            'password1': self.validated_data.get('password1', ''),
+            'email': self.validated_data.get('email', ''),
+        }
+
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        adapter.save_user(request, user, self)
+        setup_user_email(request, user, [])
+        user.profile.save()
+        return user
