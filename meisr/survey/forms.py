@@ -9,13 +9,11 @@ class SurveyForm(forms.Form):
 		
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
-		total_routines = Routine.objects.all().order_by("-number")[0].number
-
 		prev = None
 		for i,q in enumerate(Question.objects.all()):
 			header = ''
 			if not prev or q.routine != prev.routine:
-				header = "{}/{} {}".format(q.routine.number , total_routines, q.routine)
+				header = q.routine
 			self.fields['custom_%s' % i] = forms.ChoiceField(
 				required=False,
 				label=q.question_text,

@@ -26,7 +26,7 @@ SECRET_KEY = 'z6eagruqw@z9+4#2*k%32byh_f^95jxwj89q7nbt1f9p*95k_n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['skim99.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'skim99.pythonanywhere.com']
 
 
 # Application definition
@@ -157,3 +157,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'survey.api.serializers.UserSerializer'
+}

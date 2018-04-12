@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_auth.serializers import UserDetailsSerializer
 from survey.models import *
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -37,3 +38,21 @@ class ScoreSerializer(serializers.ModelSerializer):
 		fields = ('id', 'user', 'raw', 'dev', 'func', 'out', 'timestamp',)
 		read_only_fields = ['user']
 
+class UserSerializer(UserDetailsSerializer):
+    birth_date = serializers.CharField(source="profile.birth_date")
+
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + ('birth_date',)
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('userprofile', {})
+        birth_date = profile_data.get('birth_date')
+
+        instance = super(UserSerializer, self).update(instance, validated_data)
+
+        # get and update user profile
+        profile = instance.userprofile
+        if profile_data and birth_date:
+            profile.birth_date = birth_date
+            profile.save()
+        return instance

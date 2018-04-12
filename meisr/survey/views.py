@@ -5,6 +5,10 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import *
 from .models import *
 
+def index(request):
+    is_new_user = not Answer.objects.filter(user=request.user.id).exists()
+    return render(request, "survey/index.html", context={'is_new_user': is_new_user})
+
 def survey(request):
     answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
 
