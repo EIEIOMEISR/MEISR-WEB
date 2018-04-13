@@ -5,10 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import *
 from .models import *
 
+from django.contrib.auth.decorators import login_required
+
 def index(request):
     is_new_user = not Answer.objects.filter(user=request.user.id).exists()
     return render(request, "survey/index.html", context={'is_new_user': is_new_user})
 
+@login_required
 def survey(request):
     answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
     form = SurveyForm(request.POST or None, answers=answers)

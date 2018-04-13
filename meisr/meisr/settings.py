@@ -161,3 +161,7 @@ LOGOUT_REDIRECT_URL = '/'
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'survey.api.serializers.UserSerializer'
 }
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'survey.api.serializers.CustomRegisterSerializer',
+}
