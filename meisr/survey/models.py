@@ -24,8 +24,8 @@ class Question(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
-    #last_submit_date = models.DateField(null=True, blank=True)
-    #submit_count = models.PositiveSmallIntegerField(default=0)
+    last_submit_date = models.DateField(null=True, blank=True)
+    submit_count = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return str(self.user)
