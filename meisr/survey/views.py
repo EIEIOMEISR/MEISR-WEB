@@ -11,6 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .tokens import account_activation_token
 from .forms import *
 from .models import *
+from .charts import *
+
+
+from pygal.style import CleanStyle
 
 def index(request):
     is_new_user = not Answer.objects.filter(user=request.user.id).exists()
@@ -79,6 +83,48 @@ def activate(request, uidb64, token):
         return redirect('/')
     else:
         return render(request, 'registration/account_activation_invalid.html')
+
+def score_survey(request):
+        answers = Answer.objects.filter(user=request.user.id)
+        routines = Routine.objects.all()
+
+        scores = []
+
+        for i in range(1,routines.count()+1):
+            temp = answers.filter(question__routine__number=i)
+            scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
+
+        for x in scores:
+            routine = Routine.objects.get(number=x[2]) 
+            full = x[1]
+            age = x[0]
+            new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
+            new_score.save()
+
+        return redirect('/view_results')
+
+
+def view_results(request):
+        charts = {}
+        
+        age_bar_chart = ScoreBarChart(
+        height=600,
+        width=800,
+        explicit_size=True,
+        style=CleanStyle
+        )
+
+        full_bar_chart = ScoreBarChart(
+        height=600,
+        width=800,
+        explicit_size=True,
+        style=CleanStyle
+        )
+
+        charts['score_age'] = age_bar_chart.generate(request.user, 0)
+        charts['score_full'] = full_bar_chart.generate(request.user, 1)
+
+        return render(request, 'scores/index.html', charts)
 
 '''
 @staff_member_required
