@@ -42,7 +42,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 class ScoreSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Score
-		fields = ('id', 'user', 'raw', 'dev', 'func', 'out', 'timestamp',)
+		fields = ('id', 'user', 'routine', 'score_age', 'score_full', 'timestamp',)
 		read_only_fields = ['user']
 
 class UserSerializer(UserDetailsSerializer):
