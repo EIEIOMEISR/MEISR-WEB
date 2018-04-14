@@ -30,8 +30,8 @@ class SurveyForm(forms.Form):
 				yield (self.fields[name].widget.attrs['question'], int(value))
 
 class SignUpForm(UserCreationForm):
-    email = email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
-    birth_date = forms.DateField(label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MM/DD/YYYY'}))
+    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
+    birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MM/DD/YYYY'}))
 
     class Meta:
         model = User
