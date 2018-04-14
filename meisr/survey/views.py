@@ -92,7 +92,8 @@ def score_survey(request):
 
         for i in range(1,routines.count()+1):
             temp = answers.filter(question__routine__number=i)
-            scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
+            if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
+                scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
 
         for x in scores:
             routine = Routine.objects.get(number=x[2]) 
