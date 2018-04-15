@@ -88,8 +88,4 @@ def view_results(request):
 @staff_member_required
 def raw_data(request):
     pass
-<<<<<<< HEAD
 '''
-=======
-'''
->>>>>>> refs/remotes/origin/master
