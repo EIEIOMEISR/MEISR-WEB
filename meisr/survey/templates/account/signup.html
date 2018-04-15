@@ -1,0 +1,24 @@
+{% extends 'survey/base.html' %}
+{% load addcss %}
+
+{% block content %}
+<div class="text-center">
+	<h1 class="h3 mb-3 font-weight-normal pt-3">Create account</h1>
+	<div class="col">
+		<form method="post">
+			{% csrf_token %}
+			{% for field in form %}
+				<div class="row p-2">
+					{{ field|addcss:"form-control" }}
+				</div>
+
+				{% for error in field.errors %}
+					<p style="color: red">{{ error }}</p>
+				{% endfor %}
+			{% endfor %}
+			<button class="btn btn-primary" type="submit">Sign up</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

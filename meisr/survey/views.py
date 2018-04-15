@@ -41,49 +41,6 @@ def survey(request):
 
     return render(request, "survey/survey.html", {'form': form})
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save() # getting an error if we refresh without saving
-            user.refresh_from_db()  # load the profile instance created by the signal
-            user.profile.birth_date = form.cleaned_data.get('birth_date')
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Activate Your MySite Account'
-            message = render_to_string('registration/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('account_activation_sent')
-    else:
-        form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
-
-def account_activation_sent(request):
-    return render(request, 'registration/account_activation_sent.html')
-
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.profile.email_confirmed = True
-        user.save()
-        login(request, user)
-        return redirect('/')
-    else:
-        return render(request, 'registration/account_activation_invalid.html')
-
 def score_survey(request):
         answers = Answer.objects.filter(user=request.user.id)
         routines = Routine.objects.all()
@@ -92,7 +49,8 @@ def score_survey(request):
 
         for i in range(1,routines.count()+1):
             temp = answers.filter(question__routine__number=i)
-            scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
+            if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
+                scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
 
         for x in scores:
             routine = Routine.objects.get(number=x[2]) 

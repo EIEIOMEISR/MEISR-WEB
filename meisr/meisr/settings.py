@@ -41,11 +41,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_auth',
     'django.contrib.sites',
+    'survey',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
-    'survey',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +69,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -163,3 +164,14 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+
+ACCOUNT_ACTIVATION_DAYS = 7
+
+ACCOUNT_SIGNUP_FORM_CLASS = "survey.forms.SignupForm"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+
+AUTHENTICATION_BACKENDS = (
+'django.contrib.auth.backends.ModelBackend',
+'allauth.account.auth_backends.AuthenticationBackend',
+)
