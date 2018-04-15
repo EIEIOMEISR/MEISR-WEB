@@ -39,6 +39,8 @@ def survey(request):
 			elif question.id not in answers:
 				a = Answer(user=request.user, question=question, rating=rating)
 				a.save()
+	else:
+		print('not valid')
 
 	return render(request, "survey/survey.html", {'form': form})
 

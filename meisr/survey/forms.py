@@ -8,6 +8,7 @@ class SurveyForm(forms.Form):
 		answers = kwargs.pop('answers')
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
+		print('remaking form')
 		prev = None
 		for i,q in enumerate(Question.objects.all()):
 			# add a header before question if new routine
@@ -15,9 +16,9 @@ class SurveyForm(forms.Form):
 			if not prev or q.routine != prev.routine:
 				header = q.routine
 			self.fields['custom_%s' % i] = forms.ChoiceField(
-				required=True,
+				required=False,
 				label=q.question_text,
-				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline'}),
+				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline', 'qid':q.id}),
 				choices=Answer.CHOICES
 				)
 			if q.id in answers:
