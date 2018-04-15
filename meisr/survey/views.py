@@ -1,7 +1,9 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail, BadHeaderError
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_text, force_bytes
@@ -16,75 +18,94 @@ from .charts import *
 from pygal.style import CleanStyle
 
 def index(request):
-    is_new_user = not Answer.objects.filter(user=request.user.id).exists()
-    return render(request, "survey/index.html", context={'is_new_user': is_new_user})
+	is_new_user = not Answer.objects.filter(user=request.user.id).exists()
+	return render(request, "survey/index.html", context={'is_new_user': is_new_user})
 
 @login_required
 def survey(request):
-    answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
-    form = SurveyForm(request.POST or None, answers=answers)
-    
-    if form.is_valid():
-        #'submit' in request.POST)
-        #Profile.objects.filter(user=request.user.id)[0].birth_date
-        for (question, rating) in form.answers():
-            # update an answer
-            if question.id in answers and rating != answers[question.id]:
-                a = Answer.objects.get(user=request.user, question=question)
-                a.rating = rating
-                a.save()
-            # add a new answer
-            elif question.id not in answers:
-                a = Answer(user=request.user, question=question, rating=rating)
-                a.save()
+	answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
+	form = SurveyForm(request.POST or None, answers=answers)
+	
+	if form.is_valid():
+		#'submit' in request.POST)
+		#Profile.objects.filter(user=request.user.id)[0].birth_date
+		for (question, rating) in form.answers():
+			# update an answer
+			if question.id in answers and rating != answers[question.id]:
+				a = Answer.objects.get(user=request.user, question=question)
+				a.rating = rating
+				a.save()
+			# add a new answer
+			elif question.id not in answers:
+				a = Answer(user=request.user, question=question, rating=rating)
+				a.save()
 
-    return render(request, "survey/survey.html", {'form': form})
+	return render(request, "survey/survey.html", {'form': form})
 
 def score_survey(request):
-        answers = Answer.objects.filter(user=request.user.id)
-        routines = Routine.objects.all()
+		answers = Answer.objects.filter(user=request.user.id)
+		routines = Routine.objects.all()
 
-        scores = []
+		scores = []
 
-        for i in range(1,routines.count()+1):
-            temp = answers.filter(question__routine__number=i)
-            if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
-                scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
+		for i in range(1,routines.count()+1):
+			temp = answers.filter(question__routine__number=i)
+			if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
+				scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
 
-        for x in scores:
-            routine = Routine.objects.get(number=x[2]) 
-            full = x[1]
-            age = x[0]
-            new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
-            new_score.save()
+		for x in scores:
+			routine = Routine.objects.get(number=x[2]) 
+			full = x[1]
+			age = x[0]
+			new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
+			new_score.save()
 
-        return redirect('/view_results')
+		return redirect('/view_results')
 
 
 def view_results(request):
-        charts = {}
-        
-        age_bar_chart = ScoreBarChart(
-        height=600,
-        width=800,
-        explicit_size=True,
-        style=CleanStyle
-        )
+		charts = {}
+		
+		age_bar_chart = ScoreBarChart(
+		height=600,
+		width=800,
+		explicit_size=True,
+		style=CleanStyle
+		)
 
-        full_bar_chart = ScoreBarChart(
-        height=600,
-        width=800,
-        explicit_size=True,
-        style=CleanStyle
-        )
+		full_bar_chart = ScoreBarChart(
+		height=600,
+		width=800,
+		explicit_size=True,
+		style=CleanStyle
+		)
 
-        charts['score_age'] = age_bar_chart.generate(request.user, 0)
-        charts['score_full'] = full_bar_chart.generate(request.user, 1)
+		charts['score_age'] = age_bar_chart.generate(request.user, 0)
+		charts['score_full'] = full_bar_chart.generate(request.user, 1)
 
-        return render(request, 'scores/index.html', charts)
+		return render(request, 'scores/index.html', charts)
 
+def emailView(request):
+	if request.method == 'GET':
+		form = ContactForm()
+	else:
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			subject = form.cleaned_data['subject']
+			from_email = form.cleaned_data['from_email']
+			message = form.cleaned_data['message']
+			try:
+				send_mail(subject, message, from_email, ['admin@example.com'])
+			except BadHeaderError:
+				return HttpResponse('Invalid header found.')
+			return redirect('/success')
+	return render(request, "survey/email.html", {'form': form})
+
+def successView(request):
+	return render(request, "survey/success.html")
+	
 '''
 @staff_member_required
 def raw_data(request):
-    pass
+	pass
 '''

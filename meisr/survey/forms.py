@@ -30,7 +30,7 @@ class SurveyForm(forms.Form):
 				yield (self.fields[name].widget.attrs['question'], int(value))
 
 class DateInput(forms.DateInput):
-    input_type = 'date'
+	input_type = 'date'
 
 class SignupForm(forms.Form):
 	birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=DateInput())
@@ -38,3 +38,8 @@ class SignupForm(forms.Form):
 	def signup(self, request, user):
 		user.profile.birth_date = self.cleaned_data['birth_date']
 		user.save()
+
+class ContactForm(forms.Form):
+	from_email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Your e-mail address'}))
+	subject = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Subject'}))
+	message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter your message'}), required=True)
