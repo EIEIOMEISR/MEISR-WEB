@@ -3,13 +3,13 @@
 {% block content %}
 
 <div class="text-center">
-	<h1 class="h3 mb-3 font-weight-normal pt-3">Confirm email address</h1>
+	<h1 class="h3 mb-3 font-weight-normal pt-3">Confirm e-mail address</h1>
 
 	{% if confirmation %}
 	{% with confirmation.email_address.user as user_display %}
 	<p>
 		{% with confirmation.email_address.email as email %}
-		Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.
+		Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.
 		{% endwith %}
 	</p>
 	{% endwith %}
