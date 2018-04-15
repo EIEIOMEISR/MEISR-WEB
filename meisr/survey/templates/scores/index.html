@@ -1,0 +1,9 @@
+{% extends 'survey/base.html' %}
+
+{% block content %}
+
+  {{ score_age|safe }}
+  {{ score_full|safe }}
+  <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>  
+
+{% endblock %}

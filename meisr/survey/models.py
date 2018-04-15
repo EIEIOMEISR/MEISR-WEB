@@ -23,6 +23,7 @@ class Question(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email_confirmed = models.BooleanField(default=False)
     birth_date = models.DateField(null=True, blank=True)
     last_submit_date = models.DateField(null=True, blank=True)
     submit_count = models.PositiveSmallIntegerField(default=0)
@@ -90,8 +91,7 @@ class Outcome(models.Model):
 
 class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    raw = models.DecimalField(max_digits=4, decimal_places=2)
-    dev = models.DecimalField(max_digits=4, decimal_places=2)
-    func = models.DecimalField(max_digits=4, decimal_places=2)
-    out = models.DecimalField(max_digits=4, decimal_places=2)
+    routine = models.ForeignKey(Routine, on_delete=models.CASCADE)
+    score_full = models.DecimalField(max_digits=4, decimal_places=2)
+    score_age = models.DecimalField(max_digits=4, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
