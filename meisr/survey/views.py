@@ -8,7 +8,6 @@ from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 
-from .tokens import account_activation_token
 from .forms import *
 from .models import *
 from .charts import *
