@@ -29,17 +29,12 @@ class SurveyForm(forms.Form):
 			if name.startswith('custom_') and value:
 				yield (self.fields[name].widget.attrs['question'], int(value))
 
-class SignUpForm(UserCreationForm):
-    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
-    birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MM/DD/YYYY'}))
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'birth_date', 'password1', 'password2', )
+class SignupForm(forms.Form):
+	birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=DateInput())
 
-    def __init__(self, *args, **kwargs):
-	    super(SignUpForm, self).__init__(*args, **kwargs)
-
-	    self.fields['username'].widget.attrs['class'] = 'form-control'
-	    self.fields['password1'].widget.attrs['class'] = 'form-control'
-	    self.fields['password2'].widget.attrs['class'] = 'form-control'
+	def signup(self, request, user):
+		user.profile.birth_date = self.cleaned_data['birth_date']
+		user.save()

@@ -3,3 +3,4 @@ djangorestframework==3.7.7
 django-rest-auth
 djangorestframework-jwt
 django-allauth
+pygal
