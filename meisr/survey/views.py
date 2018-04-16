@@ -62,29 +62,7 @@ def survey(request):
 
 	return render(request, "survey/survey.html", {'form': form})
 
-def score_survey(request):
-		answers = Answer.objects.filter(user=request.user.id)
-		routines = Routine.objects.all()
-
-		scores = []
-
-        for i in range(1,routines.count()+1):
-            total_answers = answers.filter(question__routine__number=i)
-            total_questions = Question.objects.filter(routine__number=i)
-            if total_answers.count() != 0 and total_questions.count() != 0:
-                scores.append([total_answers.filter(rating=3).count()/total_answers.count(),
-                               total_answers.filter(rating=3).count()/total_questions.count(),i])
-
-        for x in scores:
-            routine = Routine.objects.get(number=x[2]) 
-            age = x[0]
-            full = x[1]
-            new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
-            new_score.save()
-
-		return redirect('/view_results')
-
-
+@login_required
 def view_results(request):
         charts = {}
         
@@ -92,15 +70,21 @@ def view_results(request):
         full = "full"
 
         for routine in Routine.objects.all():
-            charts[age + str(routine.number)] = ScoreBarChart( 
-                style=CleanStyle
-            ).generate(request.user,routine,0) 
+            charts[routine.description] = {'age':ScoreBarChart(
+                    routine,
+                    age,
+                    range = (0,1),
+                    style=CleanStyle
+                ).generate(request.user),
+                'full':ScoreBarChart(
+                    routine, 
+                    full,
+                    range = (0,1),
+                    style=CleanStyle
+                ).generate(request.user) 
+            }
 
-            charts[full + str(routine.number)] = ScoreBarChart( 
-                style=CleanStyle
-            ).generate(request.user,routine,1) 
-
-        return render(request, 'scores/index.html', charts)
+        return render(request, 'scores/index.html', {'charts':charts})
 
 def emailView(request):
 	if request.method == 'GET':
