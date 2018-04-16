@@ -8,6 +8,7 @@ class SurveyForm(forms.Form):
 		answers = kwargs.pop('answers')
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
+		print('remaking form')
 		prev = None
 		for i,q in enumerate(Question.objects.all()):
 			# add a header before question if new routine
@@ -15,9 +16,9 @@ class SurveyForm(forms.Form):
 			if not prev or q.routine != prev.routine:
 				header = q.routine
 			self.fields['custom_%s' % i] = forms.ChoiceField(
-				required=True,
+				required=False,
 				label=q.question_text,
-				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline'}),
+				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline', 'qid':q.id}),
 				choices=Answer.CHOICES
 				)
 			if q.id in answers:
@@ -29,17 +30,17 @@ class SurveyForm(forms.Form):
 			if name.startswith('custom_') and value:
 				yield (self.fields[name].widget.attrs['question'], int(value))
 
-class SignUpForm(UserCreationForm):
-    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'validate form-control',}))
-    birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'MM/DD/YYYY'}))
+class DateInput(forms.DateInput):
+	input_type = 'date'
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'birth_date', 'password1', 'password2', )
+class SignupForm(forms.Form):
+	birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=DateInput())
 
-    def __init__(self, *args, **kwargs):
-	    super(SignUpForm, self).__init__(*args, **kwargs)
+	def signup(self, request, user):
+		user.profile.birth_date = self.cleaned_data['birth_date']
+		user.save()
 
-	    self.fields['username'].widget.attrs['class'] = 'form-control'
-	    self.fields['password1'].widget.attrs['class'] = 'form-control'
-	    self.fields['password2'].widget.attrs['class'] = 'form-control'
+class ContactForm(forms.Form):
+	from_email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Your e-mail address'}))
+	subject = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Subject'}))
+	message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter your message'}), required=True)

@@ -1,0 +1,29 @@
+{% extends 'survey/base.html' %}
+{% load addcss %}
+{% load static %}
+
+{% block content %}
+<link href="{% static 'css/signup.css' %}" rel="stylesheet">
+<div class="text-center">
+	<h1 class="h3 mb-3 font-weight-normal pt-3">Create account</h1>
+</div>
+
+<div class="col">
+	<form method="post" class="signup">
+		{% csrf_token %}
+		{% for field in form %}
+			<div class="row pb-2">
+				{{ field|addcss:"form-control" }}
+			</div>
+
+			{% for error in field.errors %}
+				<p class="error">{{ error }}</p>
+			{% endfor %}
+		{% endfor %}
+		<div class="text-center">
+			<button class="btn btn-primary" type="submit">Sign up</button>
+		</div>
+	</form>
+</div>
+
+{% endblock %}

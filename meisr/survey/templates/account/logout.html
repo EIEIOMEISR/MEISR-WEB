@@ -1,0 +1,18 @@
+{% extends "survey/base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+    <h1 class="h3 mb-3 font-weight-normal pt-3">Sign out</h1>
+    <p>Are you sure you want to sign out?</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">Sign out</button>
+    </form>
+</div>
+
+{% endblock %}

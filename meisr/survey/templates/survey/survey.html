@@ -2,19 +2,39 @@
 
 {% block content %}
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 
 <script type="text/javascript">
 	$(window).load(function () {
 		$(':input:checked').closest('.btn').addClass('active');
-		$( "#save" ).click(function() {
-			$("input").each(function() {
-				$(this).removeAttr('required');
+
+		
+		$('.btn-primary').click(function() {
+			var complete = true;
+			$('.btn-group').each(function() {
+				var has_active = $(this).children('.active').length
+				if (has_active === 0) {
+					console.log($(this).parent().siblings().find('label').text())
+					$(this).parent().siblings().find('label').css('color', 'red');
+					$('html, body').animate({ 
+						scrollTop: $(this).offset().top - 60
+					}, 600);
+					complete = false;
+					return false;
+				}
 			});
+			if (complete) {
+				console.log('submitting')
+				$("#submitting").val("true")
+				$("#mysurvey").submit();
+			}
 		});
+
 	});
 </script>
 
-<form method="POST" action=".">
+<form method="POST" action="." id="mysurvey">
+	<input type="hidden" id="submitting" name="flag" value="false">
 	{% csrf_token %}
 
 	{% for field in form %}
@@ -45,11 +65,10 @@
 	<hr>
 	{% endfor %}
 
-
 	<div class="row">
 		<div class="text-center fixed-bottom bg-dark p-1">
-			<input class="btn btn-secondary" type=submit name="save" id="save" value="Save"\>
-			<input class="btn btn-primary" type=submit name="submit" id="submit" value="Submit"\>
+			<input class="btn btn-secondary" type=submit name="save" value="Save"\>
+			<input class="btn btn-primary" type=button value="Submit"\>
 		</div>
 	</div>
 
