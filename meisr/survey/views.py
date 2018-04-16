@@ -62,48 +62,29 @@ def survey(request):
 
 	return render(request, "survey/survey.html", {'form': form})
 
-def score_survey(request):
-		answers = Answer.objects.filter(user=request.user.id)
-		routines = Routine.objects.all()
-
-		scores = []
-
-		for i in range(1,routines.count()+1):
-			temp = answers.filter(question__routine__number=i)
-			if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
-				scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
-
-		for x in scores:
-			routine = Routine.objects.get(number=x[2]) 
-			full = x[1]
-			age = x[0]
-			new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
-			new_score.save()
-
-		return redirect('/view_results')
-
-
+@login_required
 def view_results(request):
-		charts = {}
-		
-		age_bar_chart = ScoreBarChart(
-		height=600,
-		width=800,
-		explicit_size=True,
-		style=CleanStyle
-		)
+        charts = {}
+        
+        age = "age"
+        full = "full"
 
-		full_bar_chart = ScoreBarChart(
-		height=600,
-		width=800,
-		explicit_size=True,
-		style=CleanStyle
-		)
+        for routine in Routine.objects.all():
+            charts[routine.description] = {'age':ScoreBarChart(
+                    routine,
+                    age,
+                    range = (0,1),
+                    style=CleanStyle
+                ).generate(request.user),
+                'full':ScoreBarChart(
+                    routine, 
+                    full,
+                    range = (0,1),
+                    style=CleanStyle
+                ).generate(request.user) 
+            }
 
-		charts['score_age'] = age_bar_chart.generate(request.user, 0)
-		charts['score_full'] = full_bar_chart.generate(request.user, 1)
-
-		return render(request, 'scores/index.html', charts)
+        return render(request, 'scores/index.html', {'charts':charts})
 
 def emailView(request):
 	if request.method == 'GET':
