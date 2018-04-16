@@ -24,7 +24,9 @@
 				}
 			});
 			if (complete) {
-				$( "#mysurvey" ).submit();
+				console.log('submitting')
+				$("#submitting").val("true")
+				$("#mysurvey").submit();
 			}
 		});
 
@@ -32,6 +34,7 @@
 </script>
 
 <form method="POST" action="." id="mysurvey">
+	<input type="hidden" id="submitting" name="flag" value="false">
 	{% csrf_token %}
 
 	{% for field in form %}
@@ -64,7 +67,7 @@
 
 	<div class="row">
 		<div class="text-center fixed-bottom bg-dark p-1">
-			<input class="btn btn-secondary" type=submit  value="Save"\>
+			<input class="btn btn-secondary" type=submit name="save" value="Save"\>
 			<input class="btn btn-primary" type=button value="Submit"\>
 		</div>
 	</div>

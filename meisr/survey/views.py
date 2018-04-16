@@ -1,8 +1,10 @@
+from datetime import datetime
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response, render
 from django.template.loader import render_to_string
@@ -26,21 +28,37 @@ def survey(request):
 	answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
 	form = SurveyForm(request.POST or None, answers=answers)
 	
+	submitting = 'flag' in request.POST and request.POST['flag'] == 'true'
+	print('submitting', submitting)
+
 	if form.is_valid():
-		#'submit' in request.POST)
-		#Profile.objects.filter(user=request.user.id)[0].birth_date
+		if submitting:
+			lsd = Profile.objects.get(id=request.user.id).last_submit_date
+			if lsd:
+				cur = datetime.now()
+				diff = (cur.year - lsd.year) * 12 + cur.month - lsd.month
+			if lsd and diff < 6:
+				submitting = False
+
 		for (question, rating) in form.answers():
-			# update an answer
+			# update
 			if question.id in answers and rating != answers[question.id]:
 				a = Answer.objects.get(user=request.user, question=question)
 				a.rating = rating
 				a.save()
-			# add a new answer
+			# add
 			elif question.id not in answers:
 				a = Answer(user=request.user, question=question, rating=rating)
 				a.save()
-	else:
-		print('not valid')
+			if submitting:
+				sc = Profile.objects.get(id=request.user.id).submit_count
+				ar = Archive(user=request.user, question=question, rating=rating, submit_count=sc)
+				ar.save()
+		if submitting:
+			p = Profile.objects.get(id=request.user.id)
+			p.last_submit_date = datetime.now()
+			p.submit_count += 1
+			p.save()
 
 	return render(request, "survey/survey.html", {'form': form})
 

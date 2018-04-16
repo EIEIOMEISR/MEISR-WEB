@@ -51,3 +51,8 @@ class ScoreAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Score._meta.fields]
 
 admin.site.register(Score, ScoreAdmin)
+
+class ArchiveAdmin(admin.ModelAdmin):
+	list_display = [field.name for field in Archive._meta.fields]
+
+admin.site.register(Archive, ArchiveAdmin)
