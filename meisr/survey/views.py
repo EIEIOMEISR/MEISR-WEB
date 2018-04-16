@@ -68,7 +68,6 @@ def score_survey(request):
 
 		scores = []
 
-<<<<<<< HEAD
         for i in range(1,routines.count()+1):
             total_answers = answers.filter(question__routine__number=i)
             total_questions = Question.objects.filter(routine__number=i)
@@ -87,7 +86,6 @@ def score_survey(request):
 
 
 def view_results(request):
-<<<<<<< HEAD
         charts = {}
         
         age = "age"
