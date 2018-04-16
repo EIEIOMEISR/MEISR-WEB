@@ -91,14 +91,16 @@ def score_survey(request):
         scores = []
 
         for i in range(1,routines.count()+1):
-            temp = answers.filter(question__routine__number=i)
-            if temp.count() != 0 and temp.exclude(rating__isnull=True) != 0:
-                scores.append([temp.filter(rating=3).count()/temp.exclude(rating__isnull=True).count(),temp.filter(rating=3).count()/temp.count(),i])
+            total_answers = answers.filter(question__routine__number=i)
+            total_questions = Question.objects.filter(routine__number=i)
+            if total_answers.count() != 0 and total_questions.count() != 0:
+                scores.append([total_answers.filter(rating=3).count()/total_answers.count(),
+                               total_answers.filter(rating=3).count()/total_questions.count(),i])
 
         for x in scores:
             routine = Routine.objects.get(number=x[2]) 
-            full = x[1]
             age = x[0]
+            full = x[1]
             new_score = Score(user=request.user, routine=routine, score_full=full, score_age=age)
             new_score.save()
 
@@ -108,22 +110,17 @@ def score_survey(request):
 def view_results(request):
         charts = {}
         
-        age_bar_chart = ScoreBarChart(
-        height=600,
-        width=800,
-        explicit_size=True,
-        style=CleanStyle
-        )
+        age = "age"
+        full = "full"
 
-        full_bar_chart = ScoreBarChart(
-        height=600,
-        width=800,
-        explicit_size=True,
-        style=CleanStyle
-        )
+        for routine in Routine.objects.all():
+            charts[age + str(routine.number)] = ScoreBarChart( 
+                style=CleanStyle
+            ).generate(request.user,routine,0) 
 
-        charts['score_age'] = age_bar_chart.generate(request.user, 0)
-        charts['score_full'] = full_bar_chart.generate(request.user, 1)
+            charts[full + str(routine.number)] = ScoreBarChart( 
+                style=CleanStyle
+            ).generate(request.user,routine,1) 
 
         return render(request, 'scores/index.html', charts)
 
