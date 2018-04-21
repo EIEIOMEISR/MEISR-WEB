@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from .models import *
 from .charts import *
+from .helpers import score_survey
 
 
 from pygal.style import CleanStyle
@@ -55,6 +56,7 @@ def survey(request):
 				ar = Archive(user=request.user, question=question, rating=rating, submit_count=sc)
 				ar.save()
 		if submitting:
+			score_survey(request.user)    
 			p = Profile.objects.get(id=request.user.id)
 			p.last_submit_date = datetime.now()
 			p.submit_count += 1
