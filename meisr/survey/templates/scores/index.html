@@ -5,8 +5,8 @@
 
   {% for key, val in charts.items %}
 	<div class="row">
-		  <div class="col">{{ val.age|safe }}</div>
-		  <div class="col">{{ val.full|safe }}</div>
+		  <div class="col-sm-12 col-md-6">{{ val.age|safe }}</div>
+		  <div class="col-sm-12 col-md-6">{{ val.full|safe }}</div>
 	</div>
   {% endfor %}
   <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>  

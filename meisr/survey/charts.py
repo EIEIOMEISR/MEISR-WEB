@@ -15,7 +15,6 @@ class ScoreBarChart():
             self.chart.title += " to Age Score"
         elif self.score_type == "full":
             self.chart.title += " Full Routine Score"
-        #self.chart.x_labels = map(str, range(1, 10))
 
     def get_data(self,user,routine,score_type):
         '''
@@ -24,9 +23,9 @@ class ScoreBarChart():
         data = {}
         for score in Score.objects.filter(user=user).filter(routine=routine).order_by('timestamp'):
             if score_type == "age":
-                data[str(score.timestamp)] = score.score_age
+                data[str(score.timestamp.date())] = score.score_age
             elif score_type == "full":
-                data[str(score.timestamp)] = score.score_full
+                data[str(score.timestamp.date())] = score.score_full
         return data
 
     def generate(self,user):
