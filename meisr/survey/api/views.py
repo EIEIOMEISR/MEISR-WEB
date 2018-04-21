@@ -47,7 +47,6 @@ class ScoreList(generics.CreateAPIView):
 
 @api_view(['GET'])
 def call_score_survey(request):
-    #answers = Answer.objects.filter(user=request.user.id)
     score_survey(request.user) 
 
     return Response(None)
