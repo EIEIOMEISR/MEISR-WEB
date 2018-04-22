@@ -1,4 +1,7 @@
+import csv
+
 from datetime import datetime
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -27,19 +30,25 @@ def index(request):
 @login_required
 def survey(request):
 	answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
-	form = SurveyForm(request.POST or None, answers=answers)
 	
+	form = SurveyForm(request.POST or None, answers=answers)
+		
 	submitting = 'flag' in request.POST and request.POST['flag'] == 'true'
-	print('submitting', submitting)
 
 	if form.is_valid():
 		if submitting:
-			lsd = Profile.objects.get(id=request.user.id).last_submit_date
+			lsd = Profile.objects.get(user=request.user).last_submit_date
 			if lsd:
 				cur = datetime.now()
 				diff = (cur.year - lsd.year) * 12 + cur.month - lsd.month
 			if lsd and diff < 6:
 				submitting = False
+			else:
+				score_survey(request.user)
+				p = Profile.objects.get(user=request.user)
+				p.last_submit_date = datetime.now()
+				p.submit_count += 1
+				p.save()
 
 		for (question, rating) in form.answers():
 			# update
@@ -52,15 +61,9 @@ def survey(request):
 				a = Answer(user=request.user, question=question, rating=rating)
 				a.save()
 			if submitting:
-				sc = Profile.objects.get(id=request.user.id).submit_count
-				ar = Archive(user=request.user, question=question, rating=rating, submit_count=sc)
+				sc = Profile.objects.get(user=request.user).submit_count
+				ar = Archive(user=request.user, question=question, rating=rating, submit_count=sc, date=datetime.now())
 				ar.save()
-		if submitting:
-			score_survey(request.user)    
-			p = Profile.objects.get(id=request.user.id)
-			p.last_submit_date = datetime.now()
-			p.submit_count += 1
-			p.save()
 
 	return render(request, "survey/survey.html", {'form': form})
 
@@ -106,9 +109,43 @@ def emailView(request):
 
 def successView(request):
 	return render(request, "survey/success.html")
-	
-'''
+
 @staff_member_required
-def raw_data(request):
-	pass
-'''
+def data(request):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="raw_data_{}.csv"'.format(datetime.now())
+
+	writer = csv.writer(response)
+
+	questions = Question.objects.order_by('routine__number', 'starting_age')
+	question_set = set(questions)
+
+	columns = ['Legajo', 'ID', 'Date of Birth']
+	for x in range(1,3):
+		columns.append('T{}Date'.format(x))
+		for i,y in enumerate(questions):
+			columns.append('T{}{}{}'.format(x,y.routine.code,i+1))
+	writer.writerow(columns)
+	
+	answers = Archive.objects.order_by('user', 'submit_count', 'question__routine__number', 'question__starting_age')
+	users = {}
+	ls = []
+
+	for x in answers:
+		if x.user not in users:
+			users[x.user] = {'dates':set()}
+			
+			if len(users) > 1:
+				writer.writerow(ls)
+			ls[:] = []
+			
+			bday = Profile.objects.get(user=x.user).birth_date
+			ls += ['','Child{}'.format(x.user.id), bday]
+		if x.date not in users[x.user]['dates']:
+			users[x.user]['dates'].add(x.date)
+			ls.append(x.date.strftime('%d-%m-%Y'))
+
+		ls.append(x.rating)
+	writer.writerow(ls)
+
+	return response

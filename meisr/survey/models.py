@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class Routine(models.Model):
 	description = models.CharField(max_length=200, unique=True)
 	number = models.PositiveSmallIntegerField(unique=True)
+	code = models.CharField(max_length=5, unique=True)
 
 	def __str__(self):
 		return self.description
@@ -100,6 +101,7 @@ class Archive(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	submit_count = models.PositiveSmallIntegerField()
 	rating = models.IntegerField(choices=Answer.CHOICES)
+	date = models.DateField()
 
 	class Meta:
 		unique_together = (("user", "question", "submit_count"),)
