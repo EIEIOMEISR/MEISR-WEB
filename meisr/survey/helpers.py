@@ -44,11 +44,11 @@ def add_tsv_to_db():
     Routine(description='Transition Time', number=14, code='TR').save()
 
     with open('../meisr.tsv') as tsvfile:
-    reader = csv.reader(tsvfile, delimiter='\t')
-    for row in reader:
-        routine = Routine.objects.get(number=int(float(row[0])))
-        new_record = Question(question_text=row[1], starting_age=int(row[2]), routine=routine)
-        add_record(new_record)
+        reader = csv.reader(tsvfile, delimiter='\t')
+        for row in reader:
+            routine = Routine.objects.get(number=int(float(row[0])))
+            new_record = Question(question_text=row[1], starting_age=int(row[2]), routine=routine)
+            add_record(new_record)
 
     with open('../meisr.tsv') as tsvfile:
         reader = csv.reader(tsvfile, delimiter='\t')
