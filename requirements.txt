@@ -4,3 +4,5 @@ django-rest-auth
 djangorestframework-jwt
 django-allauth
 pygal
+python-dotenv
+mysqlclient

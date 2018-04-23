@@ -21,10 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z6eagruqw@z9+4#2*k%32byh_f^95jxwj89q7nbt1f9p*95k_n'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'eieiomeisr.pythonanywhere.com', 'meisr.org']
 
@@ -85,8 +85,14 @@ WSGI_APPLICATION = 'meisr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eieiomeisr$default',
+        'USER': 'eieiomeisr',
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': 'eieiomeisr.mysql.pythonanywhere-services.com',
+        'TEST': {
+          'NAME': 'eieiomeisr$test_meisr',
+        }
     }
 }
 
