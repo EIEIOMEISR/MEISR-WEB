@@ -26,7 +26,7 @@ SECRET_KEY = 'z6eagruqw@z9+4#2*k%32byh_f^95jxwj89q7nbt1f9p*95k_n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'skim99.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'eieiomeisr.pythonanywhere.com', 'meisr.org']
 
 
 # Application definition
@@ -172,6 +172,6 @@ ACCOUNT_SIGNUP_FORM_CLASS = "survey.forms.SignupForm"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 AUTHENTICATION_BACKENDS = (
-'django.contrib.auth.backends.ModelBackend',
-'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
