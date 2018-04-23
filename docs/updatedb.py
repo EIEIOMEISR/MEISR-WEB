@@ -18,38 +18,28 @@ Routine(description='Bedtime', number=13, code='BT').save()
 Routine(description='Transition Time', number=14, code='TR').save()
 
 def add_record(rec):
-	try:
-		rec.save()
-	except:
-		pass
-
-x = 75
-with open('../docs/meisr.tsv') as tsvfile:
-	reader = csv.reader(tsvfile, delimiter='\t')
-	i = 0
-	for row in reader:
-		if i > x:
-			continue
-		routine = Routine.objects.get(number=int(float(row[0])))
-		new_record = Question(question_text=row[1], starting_age=int(row[2]), routine=routine)
-		add_record(new_record)
-		i += 1
+    try:
+        rec.save()
+    except:
+        pass
 
 with open('../docs/meisr.tsv') as tsvfile:
-	reader = csv.reader(tsvfile, delimiter='\t')
-	i = 0
-	for row in reader:
-		if i > x:
-			continue
-		q = Question.objects.get(question_text=row[1])
-		print(q,row[7])
-		for x in row[7].split(', '):
-			new_record = FunctionalDomain(question=q, choice=x)
-			add_record(new_record)
-		for x in row[7].split(', '):
-			new_record = DevelopmentalDomain(question=q, choice=x)
-			add_record(new_record)
-		for x in row[7].split(', '):
-			new_record = Outcome(question=q, choice=x)
-			add_record(new_record)
-		i += 1
+    reader = csv.reader(tsvfile, delimiter='\t')
+    for row in reader:
+        routine = Routine.objects.get(number=int(float(row[0])))
+        new_record = Question(question_text=row[1], starting_age=int(row[2]), routine=routine)
+        add_record(new_record)
+
+with open('../docs/meisr.tsv') as tsvfile:
+    reader = csv.reader(tsvfile, delimiter='\t')
+    for row in reader:
+        q = Question.objects.get(question_text=row[1])
+        for x in row[7].split(', '):
+            new_record = FunctionalDomain(question=q, choice=x)
+            add_record(new_record)
+        for x in row[7].split(', '):
+            new_record = DevelopmentalDomain(question=q, choice=x)
+            add_record(new_record)
+        for x in row[7].split(', '):
+            new_record = Outcome(question=q, choice=x)
+            add_record(new_record)
