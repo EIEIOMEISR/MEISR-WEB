@@ -42,14 +42,10 @@ def survey(request):
 				cur = datetime.now()
 				diff = (cur.year - lsd.year) * 12 + cur.month - lsd.month
 			if lsd and diff < 6:
-				submitting = False
+				archive = False
 			else:
-				score_survey(request.user)
-				p = Profile.objects.get(user=request.user)
-				p.last_submit_date = datetime.now()
-				p.submit_count += 1
-				p.save()
-
+				archive = True
+				
 		for (question, rating) in form.answers():
 			# update
 			if question.id in answers and rating != answers[question.id]:
@@ -60,10 +56,19 @@ def survey(request):
 			elif question.id not in answers:
 				a = Answer(user=request.user, question=question, rating=rating)
 				a.save()
-			if submitting:
+			if archive:
 				sc = Profile.objects.get(user=request.user).submit_count
 				ar = Archive(user=request.user, question=question, rating=rating, submit_count=sc, date=datetime.now())
 				ar.save()
+
+		if archive:
+			p = Profile.objects.get(user=request.user)
+			p.last_submit_date = datetime.now()
+			p.submit_count += 1
+			p.save()
+
+		if submitting:
+			score_survey(request.user)
 
 	return render(request, "survey/survey.html", {'form': form})
 
