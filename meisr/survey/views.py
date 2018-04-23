@@ -36,14 +36,13 @@ def survey(request):
 	submitting = 'flag' in request.POST and request.POST['flag'] == 'true'
 
 	if form.is_valid():
+		archive = False
 		if submitting:
 			lsd = Profile.objects.get(user=request.user).last_submit_date
 			if lsd:
 				cur = datetime.now()
 				diff = (cur.year - lsd.year) * 12 + cur.month - lsd.month
-			if lsd and diff < 6:
-				archive = False
-			else:
+			if lsd or diff >= 6:
 				archive = True
 				
 		for (question, rating) in form.answers():

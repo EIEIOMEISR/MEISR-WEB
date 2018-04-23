@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'meisr.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eieiomeisr$default',
+        'NAME': 'eieiomeisr$meisr',
         'USER': 'eieiomeisr',
         'PASSWORD': os.environ.get('DB_PASS'),
         'HOST': 'eieiomeisr.mysql.pythonanywhere-services.com',
