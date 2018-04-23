@@ -35,7 +35,7 @@ class AnswerDetail(generics.RetrieveUpdateAPIView):
         def perform_create(self, serializer):
             serializer.save(user=self.request.user)
 
-class ScoreList(generics.ListAPIView):
+class ScoreList(generics.ListCreateAPIView):
         serializer_class = ScoreSerializer
         permissions_classes = (IsAuthenticated,)
 
