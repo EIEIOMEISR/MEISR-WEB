@@ -14,19 +14,23 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
+from pygal.style import CleanStyle
 
 from .forms import *
 from .models import *
 from .charts import *
 from .helpers import score_survey
 
-
-from pygal.style import CleanStyle
-
+'''
+Home page
+'''
 def index(request):
 	is_new_user = not Answer.objects.filter(user=request.user.id).exists()
 	return render(request, "survey/index.html", context={'is_new_user': is_new_user})
 
+'''
+Survey form
+'''
 @login_required
 def survey(request):
 	answers = {x.question.id: x.rating for x in Answer.objects.filter(user=request.user.id)}
@@ -71,6 +75,9 @@ def survey(request):
 
 	return render(request, "survey/survey.html", {'form': form})
 
+'''
+Viewing scores for each routine
+'''
 @login_required
 def view_results(request):
         charts = {}
@@ -95,6 +102,9 @@ def view_results(request):
 
         return render(request, 'scores/index.html', {'charts':charts})
 
+'''
+Contact page
+'''
 def emailView(request):
 	if request.method == 'GET':
 		form = ContactForm()
@@ -114,6 +124,9 @@ def emailView(request):
 def successView(request):
 	return render(request, "survey/success.html")
 
+'''
+Download page for user data
+'''
 @staff_member_required
 def data(request):
 	response = HttpResponse(content_type='text/csv')
@@ -124,6 +137,7 @@ def data(request):
 	questions = Question.objects.order_by('routine__number', 'starting_age')
 	question_set = set(questions)
 
+	# generate column headers
 	columns = ['Legajo', 'ID', 'Date of Birth']
 	for x in range(1,3):
 		columns.append('T{}Date'.format(x))
@@ -135,6 +149,7 @@ def data(request):
 	users = {}
 	ls = []
 
+	# go through all answers build a row for each user
 	for x in answers:
 		if x.user not in users:
 			users[x.user] = {'dates':set()}

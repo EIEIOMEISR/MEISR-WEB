@@ -37,8 +37,6 @@ class AnswerSerializer(serializers.ModelSerializer):
 		fields = ('id', 'user', 'question', 'rating',)
 		read_only_fields = ['user']
 
-	#TODO: validate()
-
 class ScoreSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Score
