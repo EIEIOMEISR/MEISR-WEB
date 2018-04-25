@@ -78,7 +78,7 @@ def view_results(request):
         age = "age"
         full = "full"
 
-        for routine in Routine.objects.all():
+        for routine in Routine.objects.all().order_by('number'):
             charts[routine.description] = {'age':ScoreBarChart(
                     routine,
                     age,
@@ -105,7 +105,7 @@ def emailView(request):
 			from_email = form.cleaned_data['from_email']
 			message = form.cleaned_data['message']
 			try:
-				send_mail(subject, message, from_email, ['admin@example.com'])
+				send_mail(subject, message, from_email, ['eieomeisr@gmail.com'])
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
 			return redirect('/success')
