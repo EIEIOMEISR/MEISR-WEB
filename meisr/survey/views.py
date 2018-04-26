@@ -139,7 +139,7 @@ def data(request):
 
 	# generate column headers
 	columns = ['Legajo', 'ID', 'Date of Birth']
-	for x in range(1,3):
+	for x in range(1,4):
 		columns.append('T{}Date'.format(x))
 		for i,y in enumerate(questions):
 			columns.append('T{}{}{}'.format(x,y.routine.code,i+1))

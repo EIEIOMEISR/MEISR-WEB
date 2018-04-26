@@ -34,7 +34,7 @@ class DateInput(forms.DateInput):
 	input_type = 'date'
 
 class SignupForm(forms.Form):
-	birth_date = forms.DateField(required=True, label="Your child's date of birth", widget=DateInput())
+	birth_date = forms.DateField(required=True, label="Your child's date of birth (mm/dd/yyyy)", widget=DateInput())
 
 	def signup(self, request, user):
 		user.profile.birth_date = self.cleaned_data['birth_date']
