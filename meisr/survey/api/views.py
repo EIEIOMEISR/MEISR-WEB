@@ -37,7 +37,7 @@ class AnswerDetail(generics.RetrieveUpdateAPIView):
 
 class ScoreList(generics.ListCreateAPIView):
         serializer_class = ScoreSerializer
-        permissions_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated,)
 
         def get_queryset(self):
             return Score.objects.filter(user=self.request.user)
