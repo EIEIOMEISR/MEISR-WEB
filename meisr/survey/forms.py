@@ -3,12 +3,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
 
+'''
+Dynamically generate a form based off of the Question table
+'''
 class SurveyForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		answers = kwargs.pop('answers')
 		super(SurveyForm, self).__init__(*args, **kwargs)
 
-		print('remaking form')
 		prev = None
 		for i,q in enumerate(Question.objects.all()):
 			# add a header before question if new routine
@@ -21,6 +23,7 @@ class SurveyForm(forms.Form):
 				widget=forms.RadioSelect(attrs={'question':q, 'header':header, 'class':'inline', 'qid':q.id}),
 				choices=Answer.CHOICES
 				)
+			# check if question has already been answered
 			if q.id in answers:
 				self.initial['custom_%s' % i] = answers[q.id]
 			prev = q

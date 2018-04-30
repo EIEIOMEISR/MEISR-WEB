@@ -5,3 +5,12 @@ body > .container {
 code {
   font-size: 80%;
 }
+
+.btn-secondary:not(:disabled):not(.disabled).active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: #007bff;
+  border-color: #007bff;
+}

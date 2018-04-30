@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'eieiomeisr.pythonanywhere.com', 'www.meisr.org']
+ALLOWED_HOSTS = ['www.meisr.org']
 
 
 # Application definition
@@ -155,21 +155,24 @@ REST_USE_JWT = True
 SITE_ID = 1
 
 # For registration
-'''
-EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'postmaster@mg.meisr.org'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-'''
 
+DEFAULT_FROM_EMAIL = 'MEISR <noreply@meisr.org>'
+EMAIL_SUBJECT_PREFIX = '[MEISR] '
+
+'''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'meisrtest@gmail.com'
 EMAIL_HOST_PASSWORD = 'one12345!'
 EMAIL_PORT = 587
-
+'''
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

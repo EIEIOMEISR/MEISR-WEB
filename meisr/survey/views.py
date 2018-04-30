@@ -29,7 +29,7 @@ def index(request):
 	return render(request, "survey/index.html", context={'is_new_user': is_new_user})
 
 '''
-Survey form
+Survey page
 '''
 @login_required
 def survey(request):
@@ -46,7 +46,11 @@ def survey(request):
 			if lsd:
 				cur = datetime.now()
 				diff = (cur.year - lsd.year) * 12 + cur.month - lsd.month
-			if lsd or diff >= 6:
+				# it has been 6 months since last submit
+				if diff >= 6:
+					archive = True
+			# first time submitting
+			if not lsd:
 				archive = True
 				
 		for (question, rating) in form.answers():
@@ -115,7 +119,7 @@ def emailView(request):
 			from_email = form.cleaned_data['from_email']
 			message = form.cleaned_data['message']
 			try:
-				send_mail(subject, message, from_email, ['eieomeisr@gmail.com'])
+				send_mail(subject, message, from_email, ['eieio@ua.edu'])
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
 			return redirect('/success')

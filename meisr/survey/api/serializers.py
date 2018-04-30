@@ -38,6 +38,8 @@ class AnswerSerializer(serializers.ModelSerializer):
 		read_only_fields = ['user']
 
 class ScoreSerializer(serializers.ModelSerializer):
+	routine = RoutineSerializer(read_only=True)
+
 	class Meta:
 		model = Score
 		fields = ('id', 'user', 'routine', 'score_age', 'score_full', 'timestamp',)
