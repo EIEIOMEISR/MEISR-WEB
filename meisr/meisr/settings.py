@@ -154,29 +154,20 @@ REST_USE_JWT = True
 
 SITE_ID = 1
 
-# For registration
+# EMAIL CONFIG
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-
 DEFAULT_FROM_EMAIL = 'MEISR <noreply@meisr.org>'
 EMAIL_SUBJECT_PREFIX = '[MEISR] '
-
-'''
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'meisrtest@gmail.com'
-EMAIL_HOST_PASSWORD = 'one12345!'
-EMAIL_PORT = 587
-'''
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# ACCOUNT REGISTRATION
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'survey.api.serializers.UserSerializer'
 }
@@ -198,3 +189,14 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+# SECURITY
+SECURE_SSL_REDIRECT = True
+
+X_FRAME_OPTIONS = 'DENY'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_HSTS_SECONDS = 31536000
