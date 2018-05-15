@@ -1,5 +1,5 @@
 body > .container {
-  padding: 56px 15px 60px;
+  padding: 112px 15px 60px;
 }
 
 code {
@@ -23,5 +23,5 @@ code {
   content:"";
   display:block;
   height:112px; /* fixed header height*/
-  margin:-60px 0 0; /* negative fixed header height */
+  margin:0px 0 0; /* negative fixed header height */
 }
