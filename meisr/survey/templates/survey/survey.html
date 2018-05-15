@@ -14,10 +14,11 @@
 			$('.btn-group').each(function() {
 				var has_active = $(this).children('.active').length
 				if (has_active === 0) {
+					alert("Please complete all questions in order to Submit, or Save your progress.")
 					console.log($(this).parent().siblings().find('label').text())
 					$(this).parent().siblings().find('label').css('color', 'red');
 					$('html, body').animate({ 
-						scrollTop: $(this).offset().top - 60
+						scrollTop: $(this).offset().top - 112
 					}, 600);
 					complete = false;
 					return false;
@@ -36,7 +37,7 @@
 <nav id="navbar2" class="navbar navbar-light bg-light fixed-top second-navbar">
 	<ul class="nav">
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Routines</a>
+			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select a Routine</a>
 			<div class="dropdown-menu">
 				{% for routine in routines %}
 				<a class="dropdown-item" href="#{{routine}}">{{routine}}</a>
