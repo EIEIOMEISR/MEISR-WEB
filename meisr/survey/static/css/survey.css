@@ -1,5 +1,5 @@
 body > .container {
-  padding: 60px 15px 60px;
+  padding: 86px 15px 60px;
 }
 
 code {
@@ -7,10 +7,21 @@ code {
 }
 
 .btn-secondary:not(:disabled):not(.disabled).active {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #3f3f3f;
+  border-color: #3f3f3f;
 }
 .btn-secondary:not(:disabled):not(.disabled):active {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #3f3f3f;
+  border-color: #3f3f3f;
+}
+
+.second-navbar{
+  top: 56px;
+}
+
+:target:before {
+  content:"";
+  display:block;
+  height:120px; /* fixed header height*/
+  margin:-60px 0 0; /* negative fixed header height */
 }

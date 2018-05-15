@@ -4,13 +4,11 @@
 {% block content %}
 <link href="{% static 'css/survey.css' %}" rel="stylesheet">
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
-<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 
 <script type="text/javascript">
 	$(window).load(function () {
 		$(':input:checked').closest('.btn').addClass('active');
 
-		
 		$('.btn-primary').click(function() {
 			var complete = true;
 			$('.btn-group').each(function() {
@@ -35,7 +33,23 @@
 	});
 </script>
 
+<nav id="navbar2" class="navbar navbar-light bg-light fixed-top second-navbar">
+	<ul class="nav">
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Routines</a>
+			<div class="dropdown-menu">
+				{% for routine in routines %}
+				<a class="dropdown-item" href="#{{routine}}">{{routine}}</a>
+				{% endfor %}
+			</div>
+		</li>
+	</ul>
+</nav>
+
+
+
 <form method="POST" action="." id="mysurvey">
+
 	<input type="hidden" id="submitting" name="flag" value="false">
 	{% csrf_token %}
 
@@ -44,7 +58,7 @@
 	{% if field.field.widget.attrs.header %}
 	<div class="row py-4 text-center">
 		<div class="col">
-			<h1>{{ field.field.widget.attrs.header }}</h1>
+			<h1 id="{{ field.field.widget.attrs.header }}">{{ field.field.widget.attrs.header }}</h1>
 		</div>
 	</div>
 	{% endif %}

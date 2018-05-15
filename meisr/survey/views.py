@@ -77,7 +77,8 @@ def survey(request):
 		if submitting:
 			score_survey(request.user)
 
-	return render(request, "survey/survey.html", {'form': form})
+	routines = [x.description for x in Routine.objects.all()]
+	return render(request, "survey/survey.html", {'form': form, 'routines': routines})
 
 '''
 Viewing scores for each routine
