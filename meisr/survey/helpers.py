@@ -8,13 +8,17 @@ def score_survey(user):
     answers = Answer.objects.filter(user=user)
     routines = Routine.objects.all()
 
+    birth_date = Profile.objects.get(user=user).birth_date
+    today = datetime.now()
+    age_in_months = (today.year - birth_date.year) * 12 + today.month - birth_date.month
+
     scores = []
 
     for i in range(1,routines.count()+1):
         total_answers = answers.filter(question__routine__number=i)
         total_questions = Question.objects.filter(routine__number=i)
         if total_answers.count() != 0 and total_questions.count() != 0:
-            scores.append([total_answers.filter(rating=3).count()/total_answers.count(), total_answers.filter(rating=3).count()/total_questions.count(),i])
+            scores.append([total_answers.filter(rating=3).count()/total_questions.filter(starting_age__lte=age_in_months).count(), total_answers.filter(rating=3).count()/total_questions.count(),i])
 
     for x in scores:
         routine = Routine.objects.get(number=x[2]) 
