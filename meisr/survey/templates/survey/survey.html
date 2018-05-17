@@ -31,6 +31,16 @@
 			}
 		});
 
+		$('#mainNav').on('show.bs.collapse', function () {
+			console.log('show')
+			$('#navbar2').hide()
+		})
+
+		$('#mainNav').on('hidden.bs.collapse', function () {
+			console.log('hide')
+			$('#navbar2').show()
+		})
+
 	});
 </script>
 
