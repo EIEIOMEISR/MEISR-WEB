@@ -1,5 +1,7 @@
 {% extends 'survey/base.html' %}
+{% load static %}
 {% block content %}
+<link href="{% static 'css/survey.css' %}" rel="stylesheet">
 <div class="text-center">
     <h1 class="h3 mb-3 font-weight-normal pt-3">Results</h1>
 </div>
@@ -9,7 +11,7 @@
 <hr>
 {% for key, val in charts.items %}
 <h4>{{key}}</h4>
-<div class="row">
+<div class="row" id="{{key}}">
     <div class="col-sm-12 col-md-6">{{ val.age|safe }}</div>
     <div class="col-sm-12 col-md-6">{{ val.full|safe }}</div>
 </div>

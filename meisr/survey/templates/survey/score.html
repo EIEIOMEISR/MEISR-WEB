@@ -1,0 +1,45 @@
+{% extends 'survey/base.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/survey.css' %}" rel="stylesheet">
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+<script type="text/javascript">
+$(window).load(function() {
+    $('#mainNav').on('show.bs.collapse', function() {
+        $('#navbar2').hide();
+    });
+
+    $('#mainNav').on('hidden.bs.collapse', function() {
+        $('#navbar2').show();
+    });
+});
+</script>
+<nav id="navbar2" class="navbar navbar-light bg-light fixed-top second-navbar">
+    <ul class="nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select a Routine</a>
+            <div class="dropdown-menu">
+                {% for routine in routines %}
+                    <a class="dropdown-item" href="#{{routine}}">{{routine}}</a>
+                {% endfor %}
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="text-center">
+    <h1 class="h3 mb-3 font-weight-normal pt-3">Results</h1>
+</div>
+<div class="col">
+    <p>Here are the results of your survey. The MEISR is scored by calculating the percentage of questions answered as "Often/Beyond". There are two graphs for each routine in the MEISR. The first graph shows scores based on your child's age, and the second graph shows an overall score.</p>
+</div>
+<hr>
+{% for key, val in charts.items %}
+<h4 id="{{key}}">{{key}}</h4>
+<div class="row">
+    <div class="col-sm-12 col-md-6">{{ val.age|safe }}</div>
+    <div class="col-sm-12 col-md-6">{{ val.full|safe }}</div>
+</div>
+<hr>
+{% endfor %}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
+{% endblock %}

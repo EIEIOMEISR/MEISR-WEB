@@ -114,8 +114,8 @@ def view_results(request):
                 style=CleanStyle
         ).generate(request.user)
         }
-
-    return render(request, 'scores/index.html', {'charts': charts})
+    routines = [x.description for x in Routine.objects.all()]
+    return render(request, 'survey/score.html', {'charts': charts, 'routines': routines})
 
 
 '''

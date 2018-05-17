@@ -3,6 +3,7 @@ import csv
 
 '''
 Adds a Score record based on a user's Answer table
+
 '''
 
 
@@ -15,34 +16,30 @@ def score_survey(user):
     age_in_months = (today.year - birth_date.year) * \
         12 + today.month - birth_date.month
 
-    scores = []
-
     for i in range(1, routines.count() + 1):
         total_answers = answers.filter(question__routine__number=i)
-        total_questions = Question.objects.filter(routine__number=i)
-        if total_answers.count() != 0 and total_questions.count() != 0:
-            scores.append([total_answers.filter(rating=3).count() / total_questions.filter(
-                starting_age__lte=age_in_months).count(), total_answers.filter(rating=3).count() / total_questions.count(), i])
+        threes = total_answers.filter(rating=3)
+        total_threes = threes.count()
+        total_threes_up_to_age = threes.filter(
+            question__starting_age__lte=age_in_months).count()
+        questions = Question.objects.filter(routine__number=i)
+        total_questions_up_to_age = questions.filter(
+            starting_age__lte=age_in_months).count()
+        total_questions = questions.count()
 
-    for x in scores:
-        routine = Routine.objects.get(number=x[2])
-        age = x[0]
-        full = x[1]
+        if not total_questions_up_to_age:
+            age_score = 0
+        else:
+            age_score = 1 if total_threes_up_to_age > total_questions_up_to_age else total_threes_up_to_age / \
+                total_questions_up_to_age
+        if not total_questions:
+            total_score = 0
+        else:
+            total_score = total_threes / total_questions
+        routine = Routine.objects.get(number=i)
         new_score = Score(user=user, routine=routine,
-                          score_full=full, score_age=age)
+                          score_full=total_score, score_age=age_score)
         new_score.save()
-
-
-'''
-Add questions into the database from an excel sheet (tsv format)
-
-"meisr.tsv" should be placed inside the same directory as manage.py
-
-to invoke this command run:
-    python manage.py shell
-    from survey.helpers import add_tsv_to_db
-    add_tsv_to_db()
-'''
 
 
 def add_record(rec):
@@ -105,6 +102,10 @@ from datetime import datetime, timedelta, timezone
 
 '''
 Creates a dummy user with 3 survey submissions
+
+python manage.py shell --settings=meisr.local_settings
+from survey.helpers import *
+prefill('...')
 '''
 
 
@@ -119,7 +120,7 @@ def prefill(username=None):
     user.set_password('password123')
     user.save()
     prof = Profile.objects.get(user=user)
-    prof.birth_date = datetime.now()
+    prof.birth_date = datetime.now(timezone.utc) - timedelta(days=183 * 2)
     prof.save()
 
     # verify the user
@@ -137,7 +138,7 @@ def prefill(username=None):
             if q.id in answers:
                 answer = Answer.objects.get(user=user, question=q)
                 if answer.rating < 3:
-                    answer.rating += 1
+                    answer.rating += random.randint(0, 1)
                     answer.save()
                 rating = answer.rating
             else:
