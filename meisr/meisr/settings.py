@@ -91,7 +91,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASS'),
         'HOST': 'eieiomeisr.mysql.pythonanywhere-services.com',
         'TEST': {
-          'NAME': 'eieiomeisr$test_meisr',
+            'NAME': 'eieiomeisr$test_meisr',
         }
     }
 }

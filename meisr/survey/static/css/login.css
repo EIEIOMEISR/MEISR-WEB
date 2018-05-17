@@ -1,31 +1,37 @@
 .login {
-  width: 100%;
-  max-width: 330px;
-  margin: auto;
+    width: 100%;
+    max-width: 330px;
+    margin: auto;
 }
+
 .login .checkbox {
-  font-weight: 400;
+    font-weight: 400;
 }
+
 .login .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
 }
+
 .login .form-control:focus {
-  z-index: 2;
+    z-index: 2;
 }
+
 .login input[name="login"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
+
 .login input[name="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
+
 .login .form-error {
-  color: red;
+    color: red;
 }

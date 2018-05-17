@@ -7,43 +7,50 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from survey.models import *
 
+
 class RoutineSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Routine
-		fields = ('id', 'description', 'number')
+    class Meta:
+        model = Routine
+        fields = ('id', 'description', 'number')
+
 
 class QuestionSerializer(serializers.ModelSerializer):
-	routine = RoutineSerializer(read_only=True)
-	func = serializers.SerializerMethodField()
-	dev = serializers.SerializerMethodField()
-	out = serializers.SerializerMethodField()
+    routine = RoutineSerializer(read_only=True)
+    func = serializers.SerializerMethodField()
+    dev = serializers.SerializerMethodField()
+    out = serializers.SerializerMethodField()
 
-	class Meta:
-		model = Question
-		fields = ('id','question_text', 'starting_age', 'routine', 'func', 'dev', 'out',)
+    class Meta:
+        model = Question
+        fields = ('id', 'question_text', 'starting_age',
+                  'routine', 'func', 'dev', 'out',)
 
-	def get_func(self, obj):
-		return(FunctionalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
-	
-	def get_dev(self, obj):
-		return(DevelopmentalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
-	
-	def get_out(self, obj):
-		return(Outcome.objects.filter(question=obj.id).values_list('choice', flat=True))
+    def get_func(self, obj):
+        return(FunctionalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
+
+    def get_dev(self, obj):
+        return(DevelopmentalDomain.objects.filter(question=obj.id).values_list('choice', flat=True))
+
+    def get_out(self, obj):
+        return(Outcome.objects.filter(question=obj.id).values_list('choice', flat=True))
+
 
 class AnswerSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Answer
-		fields = ('id', 'user', 'question', 'rating',)
-		read_only_fields = ['user']
+    class Meta:
+        model = Answer
+        fields = ('id', 'user', 'question', 'rating',)
+        read_only_fields = ['user']
+
 
 class ScoreSerializer(serializers.ModelSerializer):
-	routine = RoutineSerializer(read_only=True)
+    routine = RoutineSerializer(read_only=True)
 
-	class Meta:
-		model = Score
-		fields = ('id', 'user', 'routine', 'score_age', 'score_full', 'timestamp',)
-		read_only_fields = ['user']
+    class Meta:
+        model = Score
+        fields = ('id', 'user', 'routine', 'score_age',
+                  'score_full', 'timestamp',)
+        read_only_fields = ['user']
+
 
 class UserSerializer(UserDetailsSerializer):
     birth_date = serializers.CharField(source="profile.birth_date")
@@ -63,6 +70,7 @@ class UserSerializer(UserDetailsSerializer):
             profile.birth_date = birth_date
             profile.save()
         return instance
+
 
 class CustomRegisterSerializer(RegisterSerializer):
     birth_date = serializers.DateField(required=True, write_only=True)

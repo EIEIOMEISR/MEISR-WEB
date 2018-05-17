@@ -1,10 +1,10 @@
 .contact-form {
-  width: 100%;
-  max-width: 500px;
-  margin: auto;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
 }
 
 .form-control[type="text"] {
-  width: 100%;
-  max-width: 175px;
+    width: 100%;
+    max-width: 175px;
 }

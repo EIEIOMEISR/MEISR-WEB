@@ -1,36 +1,31 @@
 {% extends "survey/base.html" %}
-
 {% block content %}
-
 <div class="row">
-	<div class="col">
-		<div class="text-center"><h1 class="display-4 mt-3">Online MEISR Tool</h1></div>
-		<p class="lead">The Measure of Engagement, Independence, and Social Relationships produces a profile of a child’s functioning in home and community routines. It is for children birth to three years of age. A child’s caregiver, such as a parent, completes it.</p>
-		
-		<hr>
-
-		<div class="text-center"><h1 class="h3">The Purpose</h1></div>
-		<ul class="lead">
-			<li>to help families, as members of intervention teams, assess the child’s competence in everyday situations, which might help them decide on intervention priorities</li>
-			<li>to help professionals ask families relevant questions about child functioning in home routines, such as when conducting a Routines-Based Interview</li>
-			<li>to monitor a child’s progress</li>
-		</ul>
-
-		<hr>
-
-		<div class="text-center"><h1 class="h3">Instructions</h1></div>
-		<p class="lead">To complete the MEISR, read each statement in each of the routines and click on one of the following: 1 = not yet, if the child does not perform the behavior described by the item, 2 = sometimes, if the child performs the behavior sometimes, and 3 = often/beyond this, if the child performs the behavior often or the child used to do this often but has outgrown the behavior.</p>
-	</div>
+    <div class="col">
+        <div class="text-center">
+            <h1 class="display-4 mt-3">Online MEISR Tool</h1></div>
+        <p class="lead">The Measure of Engagement, Independence, and Social Relationships produces a profile of a child’s functioning in home and community routines. It is for children birth to three years of age. A child’s caregiver, such as a parent, completes it.</p>
+        <hr>
+        <div class="text-center">
+            <h1 class="h3">The Purpose</h1></div>
+        <ul class="lead">
+            <li>to help families, as members of intervention teams, assess the child’s competence in everyday situations, which might help them decide on intervention priorities</li>
+            <li>to help professionals ask families relevant questions about child functioning in home routines, such as when conducting a Routines-Based Interview</li>
+            <li>to monitor a child’s progress</li>
+        </ul>
+        <hr>
+        <div class="text-center">
+            <h1 class="h3">Instructions</h1></div>
+        <p class="lead">To complete the MEISR, read each statement in each of the routines and click on one of the following: 1 = not yet, if the child does not perform the behavior described by the item, 2 = sometimes, if the child performs the behavior sometimes, and 3 = often/beyond this, if the child performs the behavior often or the child used to do this often but has outgrown the behavior.</p>
+    </div>
 </div>
-
 <div class="row text-center pt-3">
-	<div class="col">
-		{% if request.user.is_authenticated and not is_new_user %}
-		<a class="btn btn-primary" href="/survey/" role="button">Continue MEISR</a>
-		{% else %}
-		<a class="btn btn-primary" href="/survey/" role="button">Begin MEISR</a>
-		{% endif %}
-	</div>
+    <div class="col">
+        {% if request.user.is_authenticated and not is_new_user %}
+            <a class="btn btn-primary" href="/survey/" role="button">Continue MEISR</a>
+        {% else %}
+            <a class="btn btn-primary" href="/survey/" role="button">Begin MEISR</a>
+        {% endif %}
+    </div>
 </div>
-
 {% endblock %}

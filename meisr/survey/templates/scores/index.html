@@ -1,23 +1,19 @@
 {% extends 'survey/base.html' %}
-
 {% block content %}
-
 <div class="text-center">
-<h1 class="h3 mb-3 font-weight-normal pt-3">Results</h1>
+    <h1 class="h3 mb-3 font-weight-normal pt-3">Results</h1>
 </div>
-
 <div class="col">
-<p>Here are the results of your survey. The MEISR is scored by calculating the percentage of questions answered as "Often/Beyond". There are two graphs for each routine in the MEISR. The first graph shows scores based on your child's age, and the second graph shows an overall score.</p>
+    <p>Here are the results of your survey. The MEISR is scored by calculating the percentage of questions answered as "Often/Beyond". There are two graphs for each routine in the MEISR. The first graph shows scores based on your child's age, and the second graph shows an overall score.</p>
 </div>
-
-  <hr>
-  {% for key, val in charts.items %}
-	<h4>{{key}}</h4>
-	<div class="row">
-		  <div class="col-sm-12 col-md-6">{{ val.age|safe }}</div>
-		  <div class="col-sm-12 col-md-6">{{ val.full|safe }}</div>
-	</div>
-	<hr>
-  {% endfor %}
-  <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>  
+<hr>
+{% for key, val in charts.items %}
+<h4>{{key}}</h4>
+<div class="row">
+    <div class="col-sm-12 col-md-6">{{ val.age|safe }}</div>
+    <div class="col-sm-12 col-md-6">{{ val.full|safe }}</div>
+</div>
+<hr>
+{% endfor %}
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
 {% endblock %}

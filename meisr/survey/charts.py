@@ -5,18 +5,18 @@ from .models import *
 
 class ScoreBarChart():
 
-    def __init__(self, routine,score_type,**kwargs):
+    def __init__(self, routine, score_type, **kwargs):
         self.score_type = score_type
         self.routine = routine
         self.routine.description = routine.description
         self.chart = pygal.Bar(**kwargs)
-        self.chart.title = 'MEISR Results: ' + routine.description 
+        self.chart.title = 'MEISR Results: ' + routine.description
         if self.score_type == "age":
             self.chart.title += " to Age Score"
         elif self.score_type == "full":
             self.chart.title += " Full Routine Score"
 
-    def get_data(self,user,routine,score_type):
+    def get_data(self, user, routine, score_type):
         '''
         Query the db for chart data, pack them into a dict and return it.
         '''
@@ -28,9 +28,9 @@ class ScoreBarChart():
                 data[str(score.timestamp.date())] = score.score_full
         return data
 
-    def generate(self,user):
+    def generate(self, user):
         # Get chart data
-        chart_data = self.get_data(user,self.routine,self.score_type)
+        chart_data = self.get_data(user, self.routine, self.score_type)
 
         # Add data to chart
         for key, value in chart_data.items():

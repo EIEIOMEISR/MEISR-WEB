@@ -1,50 +1,43 @@
 {% extends "survey/base.html" %}
 {% load addcss %}
 {% load static %}
-
 {% block content %}
 <link href="{% static 'css/email.css' %}" rel="stylesheet">
-
 <div class="text-center">
-	<h1 class="h3 mb-3 font-weight-normal pt-3">Contact us</h1>
+    <h1 class="h3 mb-3 font-weight-normal pt-3">Contact us</h1>
 </div>
-	<div class="row px-3">
-	<div class="col-lg-7 contact-form pb-2">
-		<form method="post">
-			{% csrf_token %}
-			{% for field in form %}
-				<div class="row pb-2">
-					{{ field|addcss:"form-control" }}
-				</div>
-			{% endfor %}
-			<div class="form-actions text-center">
-			  <button class="btn btn-primary" type="submit">Send</button>
-			</div>
-		</form>
-	</div>
-
-	<div class="col-lg-5">
-
-	<div>
-		<h1 class="h4 mb-2 font-weight-normal pt-3">People</h1>
-		<p>Robin McWilliam, Director</p>
-		<p>Department of Special Education and Multiple Abilities</p>
-		<p>The University of Alabama</p>
-	</div>
-
-	<div>
-		<h1 class="h4 mb-2 font-weight-normal pt-3">E-mail</h1>
-		<p>eieio@ua.edu</p>
-	</div>
-
-	<div>
-		<h1 class="h4 mb-2 font-weight-normal pt-3">Address</h1>
-		<p>Evidence-based International Early Intervention Office</p>
-		<p>The University of Alabama</p>
-		<p>Box 870232</p>
-		<p>Tuscaloosa, Alabama 35487-0232</p>
-	</div>
-
-	</div>
+<div class="row px-3">
+    <div class="col-lg-7 contact-form pb-2">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="row pb-2">
+                {{ field|addcss:"form-control" }}
+            </div>
+            {% endfor %}
+            <div class="form-actions text-center">
+                <button class="btn btn-primary" type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-5">
+        <div>
+            <h1 class="h4 mb-2 font-weight-normal pt-3">People</h1>
+            <p>Robin McWilliam, Director</p>
+            <p>Department of Special Education and Multiple Abilities</p>
+            <p>The University of Alabama</p>
+        </div>
+        <div>
+            <h1 class="h4 mb-2 font-weight-normal pt-3">E-mail</h1>
+            <p>eieio@ua.edu</p>
+        </div>
+        <div>
+            <h1 class="h4 mb-2 font-weight-normal pt-3">Address</h1>
+            <p>Evidence-based International Early Intervention Office</p>
+            <p>The University of Alabama</p>
+            <p>Box 870232</p>
+            <p>Tuscaloosa, Alabama 35487-0232</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

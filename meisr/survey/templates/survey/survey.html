@@ -1,104 +1,87 @@
 {% extends "survey/base.html" %}
 {% load static %}
-
 {% block content %}
 <link href="{% static 'css/survey.css' %}" rel="stylesheet">
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
-
 <script type="text/javascript">
-	$(window).load(function () {
-		$(':input:checked').closest('.btn').addClass('active');
+$(window).load(function() {
+    $(':input:checked').closest('.btn').addClass('active');
 
-		$('.btn-primary').click(function() {
-			var complete = true;
-			$('.btn-group').each(function() {
-				var has_active = $(this).children('.active').length
-				if (has_active === 0) {
-					alert("Please complete all questions in order to Submit, or Save your progress.")
-					console.log($(this).parent().siblings().find('label').text())
-					$(this).parent().siblings().find('label').css('color', 'red');
-					$('html, body').animate({ 
-						scrollTop: $(this).offset().top - 112
-					}, 600);
-					complete = false;
-					return false;
-				}
-			});
-			if (complete) {
-				console.log('submitting')
-				$("#submitting").val("true")
-				$("#mysurvey").submit();
-			}
-		});
+    $('.btn-primary').click(function() {
+        var complete = true;
+        $('.btn-group').each(function() {
+            var has_active = $(this).children('.active').length
+            if (has_active === 0) {
+                alert("Please complete all questions in order to Submit, or Save your progress.")
+                //console.log($(this).parent().siblings().find('label').text());
+                $(this).parent().siblings().find('label').css('color', 'red');
+                $('html, body').animate({
+                    scrollTop: $(this).offset().top - 112
+                }, 600);
+                complete = false;
+                return false;
+            }
+        });
+        if (complete) {
+            $("#submitting").val("true");
+            $("#mysurvey").submit();
+        }
+    });
 
-		$('#mainNav').on('show.bs.collapse', function () {
-			console.log('show')
-			$('#navbar2').hide()
-		})
+    $('#mainNav').on('show.bs.collapse', function() {
+        $('#navbar2').hide();
+    });
 
-		$('#mainNav').on('hidden.bs.collapse', function () {
-			console.log('hide')
-			$('#navbar2').show()
-		})
+    $('#mainNav').on('hidden.bs.collapse', function() {
+        $('#navbar2').show();
+    });
 
-	});
+});
 </script>
-
 <nav id="navbar2" class="navbar navbar-light bg-light fixed-top second-navbar">
-	<ul class="nav">
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select a Routine</a>
-			<div class="dropdown-menu">
-				{% for routine in routines %}
-				<a class="dropdown-item" href="#{{routine}}">{{routine}}</a>
-				{% endfor %}
-			</div>
-		</li>
-	</ul>
+    <ul class="nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select a Routine</a>
+            <div class="dropdown-menu">
+                {% for routine in routines %}
+                    <a class="dropdown-item" href="#{{routine}}">{{routine}}</a>
+                {% endfor %}
+            </div>
+        </li>
+    </ul>
 </nav>
-
-
-
 <form method="POST" action="." id="mysurvey">
-
-	<input type="hidden" id="submitting" name="flag" value="false">
-	{% csrf_token %}
-
-	{% for field in form %}
-
-	{% if field.field.widget.attrs.header %}
-	<div class="row py-4 text-center">
-		<div class="col">
-			<h1 id="{{ field.field.widget.attrs.header }}">{{ field.field.widget.attrs.header }}</h1>
-		</div>
-	</div>
-	{% endif %}
-
-	<div class="row">
-		<div class="col">
-			{{ field.label_tag }}
-		</div>
-
-		<div class="col text-center">
-			<div class="btn-group btn-group-toggle" data-toggle="buttons">
-				{% for radio in field %}
-				<label style="height:37px;" class="btn btn-secondary">
-					{{radio}}
-				</label>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
-	<hr>
-	{% endfor %}
-
-	<div class="row">
-		<div class="text-center fixed-bottom bg-dark p-1">
-			<input class="btn btn-secondary" type=submit name="save" value="Save"\>
-			<input class="btn btn-primary" type=button value="Submit"\>
-		</div>
-	</div>
-
+    <input type="hidden" id="submitting" name="flag" value="false">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if field.field.widget.attrs.header %}
+            <div class="row py-4 text-center">
+                <div class="col">
+                    <h1 id="{{ field.field.widget.attrs.header }}">{{ field.field.widget.attrs.header }}</h1>
+                </div>
+            </div>
+        {% endif %}
+    <div class="row">
+        <div class="col">
+            {{ field.label_tag }}
+        </div>
+        <div class="col text-center">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                {% for radio in field %}
+                <label style="height:37px;" class="btn btn-secondary">
+                    {{radio}}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+    <div class="row">
+        <div class="text-center fixed-bottom bg-dark p-1">
+            <input class="btn btn-secondary" type=submit name="save" value="Save" \>
+            <input class="btn btn-primary" type=button value="Submit" \>
+        </div>
+    </div>
 </form>
-
 {% endblock %}
